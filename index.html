@@ -510,6 +510,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
 /* ============================================================
    🔴 STEP 1: PASTE YOUR FIREBASE CONFIG BETWEEN THE BRACES BELOW
@@ -700,10 +701,10 @@ function migrate(raw){
   return base;
 }
 /* ---------------- Firebase real-time storage (locked to signed-in devices) ---------------- */
-let dbRef = null, dbReady = false, auth = null;
+let dbRef = null, dbReady = false, auth = null, db = null;
 try{
   const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+  db = getDatabase(app);
   auth = getAuth(app);
   // Uses your own private path name — keep it obscure, it's part of your "password"
   dbRef = ref(db, 'ontiveros_doomsday_v1');
@@ -742,6 +743,7 @@ function loadState(){
     setTimeout(()=>noteEl.classList.remove('show'), 8000);
 
     attachDbListener();
+    initPush();
   }).catch((err)=>{
     console.error('Anonymous sign-in failed', err);
     note("Couldn't sign in — check your internet connection.", true);
@@ -797,6 +799,47 @@ function queueSave(){
 }
 // background retry loop: if a save is stuck, try again every 20s until it lands
 setInterval(()=>{ if(savePending) doSave(0); }, 20000);
+
+/* ---------------- push notifications ---------------- */
+const VAPID_KEY = "BEkylvR5L54eU1UEcl_VEtT4mLSri-I1As81V__7jRk3RDee3CLwDWB-EH7fgibzmrYPaa2gV0tMUpr-HXxD5SM";
+
+// One-time: which phone is this? Cached so it only asks once per device.
+function getMyRole(){
+  let role = null;
+  try { role = localStorage.getItem('doomsday_role'); } catch(e){}
+  if(role === 'misa' || role === 'daisy') return role;
+  const isMisa = window.confirm(
+    "Turn on movie notifications?\n\nOK = this is Misa's phone\nCancel = this is Daisy's phone"
+  );
+  role = isMisa ? 'misa' : 'daisy';
+  try { localStorage.setItem('doomsday_role', role); } catch(e){}
+  return role;
+}
+
+async function initPush(){
+  try {
+    if(!('serviceWorker' in navigator) || !('Notification' in window)) return;
+    if(!db) return;
+    // Ask permission
+    const permission = await Notification.requestPermission();
+    if(permission !== 'granted'){ console.log('Notifications not granted'); return; }
+    // Reuse our service worker for FCM
+    const reg = await navigator.serviceWorker.register('./sw.js');
+    // Get this device's FCM token
+    const messaging = getMessaging();
+    const token = await getToken(messaging, {
+      vapidKey: VAPID_KEY,
+      serviceWorkerRegistration: reg
+    });
+    if(!token){ console.log('No FCM token returned'); return; }
+    // Save it under this phone's role so the backend can notify the OTHER person
+    const role = getMyRole();
+    await set(ref(db, 'fcmTokens/' + role), token);
+    console.log('Push ready for:', role);
+  } catch(err){
+    console.error('Push setup failed', err);
+  }
+}
 
 /* ---------------- helpers ---------------- */
 function get(id){ return state.watched[id] || {m:false, d:false}; }
