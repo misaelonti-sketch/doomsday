@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ontiveros Road to Doomsday</title>
+<meta name="theme-color" content="#0A0F0C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Doomsday">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0A0F0C; --panel-solid:#121A15; --line:#1E2B23;
+    --emerald:#2FBF71; --emerald-glow:#43F58C; --emerald-deep:#17805A;
+    --daisy:#F2C94C; --silver:#93A39A; --ink:#E9F1EB; --danger:#E05C4B;
+    --tv:#5FA8FF; --special:#C08BFF; --mile:#FFB14B;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--void)}
+  body{
+    font-family:'Archivo',system-ui,sans-serif;color:var(--ink);min-height:100vh;
+    background:
+      radial-gradient(1200px 500px at 50% -100px, rgba(47,191,113,.10), transparent 70%),
+      radial-gradient(900px 400px at 85% 20%, rgba(242,201,76,.05), transparent 60%),
+      var(--void);
+    padding-bottom:90px;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 16px}
+  .mono{font-family:'IBM Plex Mono',monospace}
+
+  header{padding:32px 0 8px;text-align:center}
+  .family{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:var(--silver)}
+  .family b{color:var(--daisy);font-weight:600}
+  h1{
+    font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,9vw,92px);line-height:.95;letter-spacing:.02em;margin-top:10px;
+    background:linear-gradient(180deg,#F2FFF6 20%,var(--emerald) 90%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .sub{font-family:'IBM Plex Mono',monospace;color:var(--silver);font-size:13px;margin-top:6px}
+  .sub .date{color:var(--emerald-glow)}
+
+  .clock{margin:24px auto 0;display:flex;justify-content:center;gap:clamp(8px,2vw,18px)}
+  .cell{
+    background:linear-gradient(180deg,#111A14,#0C120E);border:1px solid var(--line);border-radius:var(--radius);
+    padding:14px clamp(10px,2.6vw,22px) 12px;min-width:clamp(64px,16vw,108px);text-align:center;
+    box-shadow:0 0 0 1px rgba(47,191,113,.06), 0 14px 40px rgba(0,0,0,.5);
+  }
+  .cell .num{
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(28px,6.5vw,50px);
+    color:var(--emerald-glow);text-shadow:0 0 22px rgba(67,245,140,.35);
+    font-variant-numeric:tabular-nums;line-height:1;
+  }
+  .cell .lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--silver);margin-top:8px}
+  .cell.sec .num{animation:tick 1s steps(1) infinite}
+  @keyframes tick{0%{opacity:1}50%{opacity:.82}}
+  @media (prefers-reduced-motion: reduce){.cell.sec .num{animation:none}*{transition:none !important;animation:none !important}}
+
+  .tabs{display:flex;justify-content:center;gap:10px;margin:24px 0 4px}
+  .tab{
+    font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;color:var(--silver);
+    background:transparent;border:1px solid var(--line);border-radius:12px;padding:9px 24px;cursor:pointer;transition:all .15s;
+  }
+  .tab:hover{color:var(--ink);border-color:var(--emerald-deep)}
+  .tab.on{color:#EAFFF2;background:var(--emerald-deep);border-color:var(--emerald);box-shadow:0 0 18px rgba(47,191,113,.25)}
+  .tab.on.pink{background:#6E5514;border-color:var(--daisy);color:#FFF6DC;box-shadow:0 0 18px rgba(242,201,76,.25)}
+
+  /* pathway cards */
+  .pathlbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--silver);text-align:center;margin:20px 0 10px}
+  .paths{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  @media(max-width:640px){.paths{grid-template-columns:1fr}}
+  .path{
+    background:var(--panel-solid);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 14px;text-align:center;cursor:pointer;transition:all .15s;color:var(--ink);
+  }
+  .path:hover{transform:translateY(-2px);border-color:var(--emerald-deep)}
+  .path.on{border-color:var(--emerald-glow);background:linear-gradient(180deg, rgba(47,191,113,.12), rgba(47,191,113,.03));box-shadow:0 0 20px rgba(47,191,113,.15)}
+  .path .ico{font-size:26px}
+  .path .pt{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:.04em;margin-top:6px}
+  .path .pd{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--silver);margin-top:3px;line-height:1.5}
+
+  /* stats strip */
+  .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0 6px}
+  @media(max-width:640px){.strip{grid-template-columns:repeat(3,1fr)}.strip .scell:nth-child(4),.strip .scell:nth-child(5){grid-column:span 1}}
+  .scell{background:var(--panel-solid);border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center}
+  .scell .v{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.03em}
+  .scell .k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--silver);margin-top:3px}
+  .scell.ess .v{color:var(--emerald-glow)}
+  .scell.hrs .v{color:var(--daisy)}
+
+  /* couple bars */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0 8px}
+  @media(max-width:620px){.stats{grid-template-columns:1fr 1fr}.stats .card:last-child{grid-column:1/-1}}
+  .card{background:var(--panel-solid);border:1px solid var(--line);border-radius:var(--radius);padding:14px 15px 13px}
+  .card .who{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--silver);display:flex;align-items:center;gap:8px}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .dot.m{background:var(--emerald-glow);box-shadow:0 0 8px rgba(67,245,140,.6)}
+  .dot.d{background:var(--daisy);box-shadow:0 0 8px rgba(242,201,76,.6)}
+  .dot.t{background:linear-gradient(90deg,var(--emerald-glow),var(--daisy))}
+  .card .big{font-family:'Bebas Neue',sans-serif;font-size:30px;margin-top:5px;letter-spacing:.03em}
+  .bar{height:6px;background:#0A100C;border-radius:99px;margin-top:9px;overflow:hidden;border:1px solid #16211A}
+  .bar i{display:block;height:100%;border-radius:99px;transition:width .5s ease}
+  .bar .fm{background:linear-gradient(90deg,var(--emerald-deep),var(--emerald-glow))}
+  .bar .fd{background:linear-gradient(90deg,#B98F1F,var(--daisy))}
+  .bar .ft{background:linear-gradient(90deg,var(--emerald-glow),var(--daisy))}
+
+  .pace{margin:8px 0 4px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--silver);text-align:center;line-height:1.7}
+  .pace b{color:var(--ink);font-weight:500}
+  .pace .ok{color:var(--emerald-glow)}
+
+  .nextnight{
+    margin:16px 0 4px;border:1px solid rgba(242,201,76,.35);
+    background:linear-gradient(120deg, rgba(47,191,113,.08), rgba(242,201,76,.08));
+    border-radius:var(--radius);padding:16px 18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .nextnight .pop{font-size:32px;line-height:1}
+  .nextnight .lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--daisy)}
+  .nextnight .movie{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.03em;margin-top:2px}
+  .nextnight .when{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--silver);margin-top:2px}
+  .nextnight .when b{color:var(--emerald-glow);font-weight:600}
+  .nextnight .cute{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--silver);font-style:italic;max-width:230px;text-align:right}
+  @media(max-width:560px){.nextnight .cute{margin-left:0;text-align:left;max-width:none}}
+
+  /* controls */
+  .controls{margin:16px 0 8px;display:flex;flex-direction:column;gap:10px;align-items:center}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden}
+  .seg button{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;padding:8px 18px;background:transparent;
+    color:var(--silver);border:none;cursor:pointer;transition:all .15s;
+  }
+  .seg button.on{background:var(--emerald-deep);color:#EAFFF2}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--silver);
+    background:transparent;border:1px solid var(--line);border-radius:99px;padding:7px 14px;cursor:pointer;transition:all .15s;
+  }
+  .chip:hover{border-color:var(--emerald-deep);color:var(--ink)}
+  .chip.on{background:var(--emerald-deep);border-color:var(--emerald);color:#EAFFF2}
+  .chip.tog.on{background:#3A2E52;border-color:var(--special);color:#EDE0FF}
+  .chip.tog2.on{background:#513A16;border-color:var(--daisy);color:#FFF0C7}
+  .chip:focus-visible,.tgl:focus-visible,button:focus-visible{outline:2px solid var(--emerald-glow);outline-offset:2px}
+
+  .legend{
+    display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--silver);margin:8px 0 12px;
+  }
+  .legend .pip{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:middle}
+  .legend .star{color:var(--emerald-glow)}
+  .legend .rec{color:var(--daisy)}
+
+  /* list */
+  .list{display:flex;flex-direction:column;gap:8px}
+  .row{
+    display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;
+    background:var(--panel-solid);border:1px solid var(--line);border-radius:var(--radius);
+    padding:12px 13px;transition:border-color .2s, background .2s;position:relative;overflow:hidden;
+    border-left:3px solid var(--emerald-deep);
+  }
+  .row.t-tv{border-left-color:var(--tv)}
+  .row.t-sp{border-left-color:var(--special)}
+  .row.t-ms{border-left-color:var(--mile)}
+  .row.done{border-color:rgba(67,245,140,.35);background:linear-gradient(90deg, rgba(47,191,113,.10), rgba(242,201,76,.06))}
+  .row.up{border-style:dashed;opacity:.9}
+  .ord{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--silver);text-align:center}
+  .row.done .ord{color:var(--emerald-glow)}
+  .title{font-weight:600;font-size:15px;line-height:1.3}
+  .title .imp2{color:var(--emerald-glow);margin-right:5px}
+  .title .imp1{color:var(--daisy);margin-right:5px}
+  .meta{margin-top:4px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--silver)}
+  .badge{border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+  .badge.stream{color:#9EC7FF;border-color:#233246}
+  .badge.theater{color:#FFB9AE;border-color:rgba(224,92,75,.4)}
+  .badge.type-tv{color:var(--tv);border-color:#23374F}
+  .badge.type-sp{color:var(--special);border-color:#3A2E52}
+  .badge.type-ms{color:var(--mile);border-color:#4F3A1B}
+  .badge.uni{color:#FF9EDB;border-color:#4A2440}
+  .badge.sched{color:var(--daisy);border-color:rgba(242,201,76,.4);cursor:pointer}
+  .badge.sched:hover{background:rgba(242,201,76,.1)}
+  .together{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--daisy)}
+  .note{
+    margin-top:5px;font-size:12px;color:#B9C9BF;line-height:1.45;font-style:italic;
+    border-left:2px solid var(--line);padding-left:8px;
+  }
+  .tgls{display:flex;gap:7px;align-items:center}
+  .tgl{
+    width:44px;height:38px;border-radius:10px;cursor:pointer;border:1px solid var(--line);background:#0C120E;
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;color:var(--silver);transition:all .15s;
+  }
+  .tgl:hover{transform:translateY(-1px)}
+  .tgl.m.on{background:var(--emerald-deep);border-color:var(--emerald-glow);color:#EAFFF2;box-shadow:0 0 14px rgba(67,245,140,.25)}
+  .tgl.d.on{background:#6E5514;border-color:var(--daisy);color:#FFF6DC;box-shadow:0 0 14px rgba(242,201,76,.25)}
+  .calbtn{width:38px;height:38px;border-radius:10px;cursor:pointer;border:1px solid var(--line);background:#0C120E;font-size:15px;transition:all .15s}
+  .calbtn:hover{transform:translateY(-1px);border-color:var(--daisy)}
+  @media(max-width:520px){
+    .row{grid-template-columns:26px 1fr auto;padding:11px 9px;gap:7px}
+    .tgl{width:36px;height:35px}.calbtn{width:34px;height:35px}
+  }
+  .burst{position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:22px;animation:burst .9s ease forwards}
+  @keyframes burst{0%{opacity:0;transform:scale(.4)}30%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.5) translateY(-14px)}}
+  .empty{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--silver);padding:30px 0}
+
+  /* upcoming */
+  .section-lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--silver);margin:28px 0 12px;text-align:center}
+  .ups{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:560px){.ups{grid-template-columns:1fr}}
+  .upcard{
+    background:var(--panel-solid);border:1px solid var(--line);border-radius:var(--radius);padding:16px;text-align:center;
+  }
+  .upcard.doomc{border-color:rgba(224,92,75,.5);background:linear-gradient(160deg, rgba(224,92,75,.12), rgba(224,92,75,.03))}
+  .upcard .ut{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.04em}
+  .upcard.doomc .ut{color:#FF9C8F}
+  .upcard .ud{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--silver);margin-top:3px}
+  .upcard .uc{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--emerald-glow);margin-top:8px}
+  .upcard.doomc .uc{color:#FFB9AE}
+
+  /* planner */
+  .planner{background:var(--panel-solid);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:16px 0}
+  .planner h3{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.04em}
+  .planner .ph{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--silver);margin-top:3px;line-height:1.6}
+  .prow{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-top:14px}
+  .pfield label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--silver);margin-bottom:6px}
+  .pfield input[type=number], .pfield input[type=date]{
+    background:#0C120E;border:1px solid var(--line);border-radius:10px;color:var(--ink);
+    font-family:'IBM Plex Mono',monospace;font-size:14px;padding:9px 12px;width:120px;
+  }
+  .pfield input[type=date]{width:160px;color-scheme:dark}
+  .nights{display:flex;gap:6px}
+  .nbtn{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;padding:9px 13px;border-radius:10px;
+    border:1px solid var(--line);background:#0C120E;color:var(--silver);cursor:pointer;transition:all .15s;
+  }
+  .nbtn.on{background:var(--emerald-deep);border-color:var(--emerald);color:#EAFFF2}
+  .pactions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .bigbtn{
+    font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.08em;color:#0A0F0C;
+    background:linear-gradient(90deg,var(--emerald-glow),var(--daisy));border:none;border-radius:12px;
+    padding:11px 22px;cursor:pointer;transition:transform .15s, box-shadow .15s;box-shadow:0 6px 24px rgba(47,191,113,.3);
+  }
+  .bigbtn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(242,201,76,.35)}
+  .ghostbtn{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--silver);background:transparent;
+    border:1px solid var(--line);border-radius:12px;padding:11px 18px;cursor:pointer;
+  }
+  .ghostbtn:hover{color:var(--ink);border-color:var(--danger)}
+  .verdict{margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.7;border-radius:10px;padding:12px 14px;display:none}
+  .verdict.ok{display:block;border:1px solid rgba(67,245,140,.35);background:rgba(47,191,113,.08);color:#C9FFDE}
+  .verdict.bad{display:block;border:1px solid rgba(224,92,75,.45);background:rgba(224,92,75,.08);color:#FFB9AE}
+
+  /* calendar */
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px}
+  .cal-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.05em}
+  .navb{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:#0C120E;color:var(--silver);font-size:18px;cursor:pointer;transition:all .15s}
+  .navb:hover:not(:disabled){color:var(--ink);border-color:var(--emerald-deep)}
+  .navb:disabled{opacity:.3;cursor:default}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px}
+  .dow div{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#4E5C54;text-align:center}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+  .day{
+    min-height:74px;border:1px solid var(--line);border-radius:10px;background:var(--panel-solid);
+    padding:5px;cursor:pointer;display:flex;flex-direction:column;gap:3px;transition:all .15s;text-align:left;
+  }
+  .day:hover{border-color:var(--emerald-deep);transform:translateY(-1px)}
+  .day.blank{background:transparent;border-color:transparent;cursor:default;transform:none}
+  .day.past{opacity:.45}
+  .day .n{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--silver)}
+  .day.today{border-color:var(--emerald-glow);box-shadow:0 0 12px rgba(67,245,140,.2)}
+  .day.today .n{color:var(--emerald-glow);font-weight:600}
+  .day.weekend{background:#141D17}
+  .day .ev{
+    font-size:9.5px;font-weight:600;line-height:1.25;background:rgba(242,201,76,.14);
+    border:1px solid rgba(242,201,76,.35);color:#FFE9A8;border-radius:6px;padding:2px 4px;
+    overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  }
+  .day .ev.done{background:rgba(67,245,140,.12);border-color:rgba(67,245,140,.4);color:#C9FFDE}
+  .day .ev.late{background:rgba(224,92,75,.12);border-color:rgba(224,92,75,.4);color:#FFB9AE}
+  .day.doom{border-color:var(--danger);background:linear-gradient(160deg, rgba(224,92,75,.18), rgba(224,92,75,.05));box-shadow:0 0 16px rgba(224,92,75,.25)}
+  .day.doom .n{color:#FF9C8F;font-weight:600}
+  .day .doomtag{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.06em;color:#FF9C8F;line-height:1.1}
+  @media(max-width:560px){.day{min-height:56px;padding:4px}.day .ev{-webkit-line-clamp:1;font-size:9px}}
+
+  .finale{margin-top:16px;text-align:center;border:1px dashed rgba(224,92,75,.5);border-radius:var(--radius);padding:16px;background:rgba(224,92,75,.05)}
+  .finale .t{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.04em;color:#FF9C8F}
+  .finale .s{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--silver);margin-top:4px}
+
+  .foot{margin-top:28px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4E5C54;line-height:1.9}
+  .syncbtn{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--silver);background:transparent;border:1px solid var(--line);border-radius:8px;padding:6px 14px;cursor:pointer;margin-top:6px}
+  .syncbtn:hover{color:var(--ink);border-color:var(--emerald-deep)}
+  .savenote{min-height:16px;font-size:11px;color:var(--emerald-glow);font-family:'IBM Plex Mono',monospace;margin-top:6px;opacity:0;transition:opacity .3s}
+  .savenote.show{opacity:1}
+  .savenote.err{color:#FFB9AE}
+  .hidden{display:none}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(5,8,6,.8);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
+  .overlay.show{display:flex}
+  .modal{
+    width:100%;max-width:440px;max-height:80vh;overflow:auto;background:#101812;
+    border:1px solid var(--emerald-deep);border-radius:16px;padding:20px;box-shadow:0 24px 80px rgba(0,0,0,.7);
+  }
+  .modal h3{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.04em}
+  .modal .md{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--daisy);margin-top:2px}
+  .modal .opts{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+  .opt{
+    text-align:left;background:#0C120E;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+    cursor:pointer;color:var(--ink);font-family:'Archivo',sans-serif;font-size:14px;font-weight:500;transition:all .15s;
+  }
+  .opt:hover{border-color:var(--emerald-glow);transform:translateX(2px)}
+  .opt small{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--silver);margin-top:2px}
+  .opt.rm{border-color:rgba(224,92,75,.4);color:#FFB9AE}
+  .opt.dn{border-color:rgba(67,245,140,.4);color:#C9FFDE}
+  .modal .close{margin-top:14px;width:100%;background:transparent;border:1px solid var(--line);color:var(--silver);border-radius:10px;padding:9px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px}
+  .modal .close:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="family">MISA <span style="color:#3A4A41">&times;</span> <b>DAISY &#127804;</b> &mdash; CASA ONTIVEROS</div>
+    <h1>ROAD TO DOOMSDAY</h1>
+    <div class="sub">AVENGERS: DOOMSDAY &bull; IN THEATERS <span class="date">DEC 18, 2026</span></div>
+  </header>
+
+  <div class="clock" aria-label="Countdown to Avengers Doomsday premiere">
+    <div class="cell"><div class="num" id="cd-d">--</div><div class="lbl">Days</div></div>
+    <div class="cell"><div class="num" id="cd-h">--</div><div class="lbl">Hours</div></div>
+    <div class="cell"><div class="num" id="cd-m">--</div><div class="lbl">Min</div></div>
+    <div class="cell sec"><div class="num" id="cd-s">--</div><div class="lbl">Sec</div></div>
+  </div>
+
+  <div class="nextnight hidden" id="nextnight"></div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab on" id="tab-list" role="tab" aria-selected="true">&#127916; WATCHLIST</button>
+    <button class="tab pink" id="tab-cal" role="tab" aria-selected="false">&#127871; MOVIE NIGHTS</button>
+  </div>
+
+  <!-- ================= WATCHLIST ================= -->
+  <div id="view-list">
+    <div class="pathlbl">// Your Pathway</div>
+    <div class="paths">
+      <button class="path" data-path="new">
+        <div class="ico">&#127756;</div>
+        <div class="pt">LET'S START FROM THE BEGINNING</div>
+        <div class="pd">The complete story &mdash; every movie, show &amp; special</div>
+      </button>
+      <button class="path on" data-path="doom">
+        <div class="ico">&#129527;</div>
+        <div class="pt">PREPARE FOR DOOMSDAY</div>
+        <div class="pd">Essential &#9733; and recommended &#10022; core hits</div>
+      </button>
+      <button class="path" data-path="ess">
+        <div class="ico">&#9889;</div>
+        <div class="pt">JUST THE ESSENTIALS</div>
+        <div class="pd">The absolute fast-track checklist</div>
+      </button>
+    </div>
+
+    <div class="strip">
+      <div class="scell"><div class="v" id="st-total">&mdash;</div><div class="k">Total</div></div>
+      <div class="scell"><div class="v" id="st-watched">&mdash;</div><div class="k">Watched</div></div>
+      <div class="scell"><div class="v" id="st-remain">&mdash;</div><div class="k">Remaining</div></div>
+      <div class="scell ess"><div class="v" id="st-essleft">&mdash;</div><div class="k">Essential Left</div></div>
+      <div class="scell hrs"><div class="v" id="st-hours">&mdash;</div><div class="k">Hours Left</div></div>
+    </div>
+
+    <div class="stats">
+      <div class="card">
+        <div class="who"><span class="dot m"></span>MISA</div>
+        <div class="big" id="stat-m">0 / 0</div>
+        <div class="bar"><i class="fm" id="bar-m" style="width:0%"></i></div>
+      </div>
+      <div class="card">
+        <div class="who"><span class="dot d"></span>DAISY &#127804;</div>
+        <div class="big" id="stat-d">0 / 0</div>
+        <div class="bar"><i class="fd" id="bar-d" style="width:0%"></i></div>
+      </div>
+      <div class="card">
+        <div class="who"><span class="dot t"></span>WATCHED TOGETHER</div>
+        <div class="big" id="stat-t">0 / 0</div>
+        <div class="bar"><i class="ft" id="bar-t" style="width:0%"></i></div>
+      </div>
+    </div>
+
+    <div class="pace" id="pace"></div>
+
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Watch order">
+        <button id="ord-story" class="on">Story Order</button>
+        <button id="ord-release">Release Order</button>
+      </div>
+      <div class="chips" role="group" aria-label="Type filter">
+        <button class="chip on" data-f="all">All</button>
+        <button class="chip" data-f="unwatched">Unwatched</button>
+        <button class="chip" data-f="films">Films</button>
+        <button class="chip" data-f="tv">TV</button>
+      </div>
+      <div class="chips">
+        <button class="chip tog2" id="tg-fox">&#129409; FOX / SONY Universes</button>
+        <button class="chip tog" id="tg-spoil">&#128064; Why-it-matters notes</button>
+        <button class="chip tog" id="tg-cred">&#127902; Watch credits with movie</button>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span><span class="pip" style="background:var(--emerald)"></span>Movie</span>
+      <span><span class="pip" style="background:var(--tv)"></span>TV</span>
+      <span><span class="pip" style="background:var(--special)"></span>Special</span>
+      <span><span class="pip" style="background:var(--mile)"></span>Milestone</span>
+      <span class="star">&#9733; Essential</span>
+      <span class="rec">&#10022; Recommended</span>
+      <span>&#9733;/&#10022; = pays off in Doomsday</span>
+    </div>
+
+    <div id="list" class="list"></div>
+
+    <div class="section-lbl">// Upcoming In Theaters</div>
+    <div class="ups">
+      <div class="upcard">
+        <div class="ut">SPIDER-MAN: BRAND NEW DAY</div>
+        <div class="ud">In theaters July 31, 2026</div>
+        <div class="uc" id="up-bnd">&mdash;</div>
+      </div>
+      <div class="upcard doomc">
+        <div class="ut">AVENGERS: DOOMSDAY &#127909;</div>
+        <div class="ud">In theaters December 18, 2026 &bull; The finish line</div>
+        <div class="uc" id="up-doom">&mdash;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MOVIE NIGHTS ================= -->
+  <div id="view-cal" class="hidden">
+    <div class="planner">
+      <h3>&#9201; VIEWING PLANNER</h3>
+      <div class="ph">Set your weekly couch capacity &mdash; the app fills your calendar in watch order and tells you if you'll make it before premiere night.</div>
+      <div class="prow">
+        <div class="pfield">
+          <label>Hours per week</label>
+          <input type="number" id="pl-hpw" min="1" max="40" step="0.5" value="6">
+        </div>
+        <div class="pfield">
+          <label>Our movie nights</label>
+          <div class="nights">
+            <button class="nbtn" data-n="5">Fri</button>
+            <button class="nbtn on" data-n="6">Sat</button>
+            <button class="nbtn on" data-n="0">Sun</button>
+          </div>
+        </div>
+        <div class="pfield">
+          <label>Target finish date</label>
+          <input type="date" id="pl-target" value="2026-12-17" min="2026-07-23" max="2027-12-31">
+        </div>
+      </div>
+      <div class="pactions">
+        <button class="bigbtn" id="pl-gen">&#9889; GENERATE OUR SCHEDULE</button>
+        <button class="ghostbtn" id="pl-clear">&#10005; Clear schedule</button>
+      </div>
+      <div class="verdict" id="pl-verdict"></div>
+    </div>
+
+    <div class="pace" id="dash"></div>
+
+    <div class="cal-head">
+      <button class="navb" id="cal-prev" aria-label="Previous month">&#8592;</button>
+      <div class="cal-title" id="cal-title">MONTH</div>
+      <button class="navb" id="cal-next" aria-label="Next month">&#8594;</button>
+    </div>
+    <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+    <div class="grid" id="grid"></div>
+
+    <div class="finale">
+      <div class="t">DEC 18, 2026 &mdash; DOOMSDAY &#127909;</div>
+      <div class="s">The only date on this calendar you can't reschedule.</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    Live sync is on &mdash; the second Daisy taps on her phone, it appears on yours.<br>
+    <button class="syncbtn" id="sync">&#8635; Sync</button>
+    <div class="savenote" id="savenote">Saved</div>
+  </div>
+</div>
+
+<!-- modal -->
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3 id="modal-title">Pick a movie</h3>
+    <div class="md" id="modal-date"></div>
+    <div class="opts" id="modal-opts"></div>
+    <button class="close" id="modal-close">Never mind</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+/* ============================================================
+   🔴 STEP 1: PASTE YOUR FIREBASE CONFIG BETWEEN THE BRACES BELOW
+   (from firebase.google.com → your project → the </> web app →
+   the block that starts "const firebaseConfig = {")
+============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyDXwmFVOCFAy7hC5auCSC7emdOF4KN4J6M",
+  authDomain: "doomsday-tracker.firebaseapp.com",
+  databaseURL: "https://doomsday-tracker-default-rtdb.firebaseio.com",
+  projectId: "doomsday-tracker",
+  storageBucket: "doomsday-tracker.firebasestorage.app",
+  messagingSenderId: "930591622843",
+  appId: "1:930591622843:web:9bf760326dd0d0d139cb9e"
+};
+
+/* ============================================================
+   CATALOG — t: m=movie tv=TV sp=special ms=milestone
+   imp: 2=Essential ★  1=Recommended ✦  0=Optional
+   u: mcu | fox | sony     rel: release sort key
+   up: not released yet    w: where to watch
+============================================================ */
+const ITEMS = [
+// ---- MCU films ----
+{id:'im1',n:'Iron Man',y:2008,rt:126,t:'m',imp:2,u:'mcu',rel:'2008-05',w:'Disney+',note:'Where it all begins — and the face of Doom is very familiar.'},
+{id:'hulk',n:'The Incredible Hulk',y:2008,rt:112,t:'m',imp:0,u:'mcu',rel:'2008-06',w:'Disney+'},
+{id:'im2',n:'Iron Man 2',y:2010,rt:124,t:'m',imp:1,u:'mcu',rel:'2010-05',w:'Disney+',note:'Black Widow debuts; Tony\u2019s legacy deepens.'},
+{id:'thor1',n:'Thor',y:2011,rt:115,t:'m',imp:1,u:'mcu',rel:'2011-05',w:'Disney+',note:'Meet Thor and Loki — both matter enormously later.'},
+{id:'cap1',n:'Captain America: The First Avenger',y:2011,rt:124,t:'m',imp:2,u:'mcu',rel:'2011-07',w:'Disney+',note:'The heart of the Avengers. Story-order starting line.'},
+{id:'avengers',n:'The Avengers',y:2012,rt:143,t:'ms',imp:2,u:'mcu',rel:'2012-05',w:'Disney+',note:'The team assembles. Loki\u2019s scepter starts everything.'},
+{id:'im3',n:'Iron Man 3',y:2013,rt:130,t:'m',imp:1,u:'mcu',rel:'2013-05',w:'Disney+',note:'Tony\u2019s anxiety arc — echoes into who Doom is.'},
+{id:'thor2',n:'Thor: The Dark World',y:2013,rt:112,t:'m',imp:0,u:'mcu',rel:'2013-11',w:'Disney+'},
+{id:'caws',n:'Captain America: The Winter Soldier',y:2014,rt:136,t:'m',imp:2,u:'mcu',rel:'2014-04',w:'Disney+',note:'Bucky returns. Sets up Sam, Bucky, and Thunderbolts threads.'},
+{id:'gotg',n:'Guardians of the Galaxy',y:2014,rt:121,t:'m',imp:1,u:'mcu',rel:'2014-08',w:'Disney+',note:'Cosmic MCU opens up; infinity stones explained.'},
+{id:'aou',n:'Avengers: Age of Ultron',y:2015,rt:141,t:'ms',imp:2,u:'mcu',rel:'2015-05',w:'Disney+',note:'Vision & Wanda arrive; the team starts to fracture.'},
+{id:'antman',n:'Ant-Man',y:2015,rt:117,t:'m',imp:1,u:'mcu',rel:'2015-07',w:'Disney+',note:'The Quantum Realm — the multiverse\u2019s back door.'},
+{id:'civilwar',n:'Captain America: Civil War',y:2016,rt:147,t:'m',imp:2,u:'mcu',rel:'2016-05',w:'Disney+',note:'The Avengers break up. Everyone\u2019s status quo shifts.'},
+{id:'drs',n:'Doctor Strange',y:2016,rt:115,t:'m',imp:2,u:'mcu',rel:'2016-11',w:'Disney+',note:'Magic + multiverse rules 101.'},
+{id:'gotg2',n:'Guardians of the Galaxy Vol. 2',y:2017,rt:136,t:'m',imp:1,u:'mcu',rel:'2017-05',w:'Disney+',note:'Family themes that pay off in Infinity War.'},
+{id:'smh',n:'Spider-Man: Homecoming',y:2017,rt:133,t:'m',imp:1,u:'mcu',rel:'2017-07',w:'Disney+',note:'Peter\u2019s MCU story begins — leads to Brand New Day.'},
+{id:'ragnarok',n:'Thor: Ragnarok',y:2017,rt:130,t:'m',imp:2,u:'mcu',rel:'2017-11',w:'Disney+',note:'Thor\u2019s reinvention; walks straight into Infinity War.'},
+{id:'bp',n:'Black Panther',y:2018,rt:134,t:'m',imp:2,u:'mcu',rel:'2018-02',w:'Disney+',note:'Wakanda — central to Doomsday\u2019s alliances.'},
+{id:'iw',n:'Avengers: Infinity War',y:2018,rt:149,t:'ms',imp:2,u:'mcu',rel:'2018-04',w:'Disney+',note:'The snap. Non-negotiable.'},
+{id:'aw',n:'Ant-Man and the Wasp',y:2018,rt:118,t:'m',imp:1,u:'mcu',rel:'2018-07',w:'Disney+',note:'Quantum Realm deep dive that enables Endgame.'},
+{id:'cm',n:'Captain Marvel',y:2019,rt:123,t:'m',imp:1,u:'mcu',rel:'2019-03',w:'Disney+',note:'Carol\u2019s origin; sets up The Marvels.'},
+{id:'endgame',n:'Avengers: Endgame',y:2019,rt:181,t:'ms',imp:2,u:'mcu',rel:'2019-04',w:'Disney+',note:'The Infinity Saga payoff. Watch (or rewatch) before Doomsday.'},
+{id:'ffh',n:'Spider-Man: Far From Home',y:2019,rt:129,t:'m',imp:1,u:'mcu',rel:'2019-07',w:'Disney+',note:'The world after Endgame; Peter\u2019s identity exposed.'},
+{id:'bw',n:'Black Widow',y:2021,rt:134,t:'m',imp:1,u:'mcu',rel:'2021-07',w:'Disney+',note:'Yelena\u2019s debut — she leads into Thunderbolts*.'},
+{id:'shangchi',n:'Shang-Chi and the Legend of the Ten Rings',y:2021,rt:132,t:'m',imp:2,u:'mcu',rel:'2021-09',w:'Disney+',note:'The Ten Rings are signaling... something for the Saga.'},
+{id:'eternals',n:'Eternals',y:2021,rt:156,t:'m',imp:0,u:'mcu',rel:'2021-11',w:'Disney+'},
+{id:'nwh',n:'Spider-Man: No Way Home',y:2021,rt:148,t:'m',imp:2,u:'mcu',rel:'2021-12',w:'Disney+',note:'The multiverse cracks open on screen for the first time.'},
+{id:'mom',n:'Doctor Strange in the Multiverse of Madness',y:2022,rt:126,t:'m',imp:2,u:'mcu',rel:'2022-05',w:'Disney+',note:'Incursions + the Illuminati — core Doomsday rules.'},
+{id:'lat',n:'Thor: Love and Thunder',y:2022,rt:118,t:'m',imp:2,u:'mcu',rel:'2022-07',w:'Disney+',note:'Where Thor\u2019s head is at going into Doomsday.'},
+{id:'wf',n:'Black Panther: Wakanda Forever',y:2022,rt:161,t:'m',imp:2,u:'mcu',rel:'2022-11',w:'Disney+',note:'Wakanda + Talokan — both appear in the Doomsday trailer.'},
+{id:'quant',n:'Ant-Man and the Wasp: Quantumania',y:2023,rt:124,t:'m',imp:2,u:'mcu',rel:'2023-02',w:'Disney+',note:'Multiverse stakes go big-screen.'},
+{id:'gotg3',n:'Guardians of the Galaxy Vol. 3',y:2023,rt:150,t:'m',imp:1,u:'mcu',rel:'2023-05',w:'Disney+',note:'Closes the Guardians\u2019 chapter before the finale.'},
+{id:'marvels',n:'The Marvels',y:2023,rt:105,t:'m',imp:2,u:'mcu',rel:'2023-11',w:'Disney+',note:'That post-credits scene? X-Men. It matters now.'},
+{id:'dw',n:'Deadpool & Wolverine',y:2024,rt:128,t:'m',imp:2,u:'mcu',rel:'2024-07',w:'Disney+',note:'Fox universe officially collides with the MCU.'},
+{id:'bnw',n:'Captain America: Brave New World',y:2025,rt:118,t:'m',imp:2,u:'mcu',rel:'2025-02',w:'Disney+',note:'Sam\u2019s first outing as Cap — he leads in Doomsday.'},
+{id:'tbolts',n:'Thunderbolts*',y:2025,rt:127,t:'m',imp:2,u:'mcu',rel:'2025-05',w:'Disney+',note:'The New Avengers. The asterisk is the whole point.'},
+{id:'ff',n:'The Fantastic Four: First Steps',y:2025,rt:115,t:'m',imp:2,u:'mcu',rel:'2025-07',w:'Disney+',note:'Reed\u2019s family, Doom\u2019s obsession. Direct lead-in.'},
+{id:'bnd',n:'Spider-Man: Brand New Day',y:2026,rt:130,t:'m',imp:1,u:'mcu',rel:'2026-07',w:'Theaters Jul 31',up:true,note:'Peter, forgotten by the world, with the Punisher in tow.'},
+{id:'doomsday',n:'Avengers: Doomsday',y:2026,rt:170,t:'ms',imp:2,u:'mcu',rel:'2026-12',w:'Theaters Dec 18',up:true,note:'The one this whole list is for.'},
+// ---- Disney+ series & specials ----
+{id:'wv',n:'WandaVision',y:2021,rt:350,t:'tv',imp:2,u:'mcu',rel:'2021-01',w:'Disney+',eps:'9 eps',note:'Wanda\u2019s grief reshapes reality — Saga-critical.'},
+{id:'fatws',n:'The Falcon and the Winter Soldier',y:2021,rt:300,t:'tv',imp:1,u:'mcu',rel:'2021-03',w:'Disney+',eps:'6 eps',note:'How Sam takes up the shield.'},
+{id:'loki1',n:'Loki — Season 1',y:2021,rt:281,t:'tv',imp:2,u:'mcu',rel:'2021-06',w:'Disney+',eps:'6 eps',note:'The TVA, timelines, variants — the multiverse rulebook.'},
+{id:'whatif1',n:'What If...? — Season 1',y:2021,rt:290,t:'tv',imp:1,u:'mcu',rel:'2021-08',w:'Disney+',eps:'9 eps',note:'Variants visualized; several ideas resurface.'},
+{id:'hawkeye',n:'Hawkeye',y:2021,rt:300,t:'tv',imp:1,u:'mcu',rel:'2021-11',w:'Disney+',eps:'6 eps',note:'Yelena & Kate — Thunderbolts and beyond.'},
+{id:'moonknight',n:'Moon Knight',y:2022,rt:280,t:'tv',imp:0,u:'mcu',rel:'2022-03',w:'Disney+',eps:'6 eps'},
+{id:'msmarvel',n:'Ms. Marvel',y:2022,rt:280,t:'tv',imp:1,u:'mcu',rel:'2022-06',w:'Disney+',eps:'6 eps',note:'Kamala\u2019s mutation reveal + The Marvels setup.'},
+{id:'shehulk',n:'She-Hulk: Attorney at Law',y:2022,rt:310,t:'tv',imp:0,u:'mcu',rel:'2022-08',w:'Disney+',eps:'9 eps'},
+{id:'wbn',n:'Werewolf by Night',y:2022,rt:53,t:'sp',imp:0,u:'mcu',rel:'2022-10',w:'Disney+'},
+{id:'gotghol',n:'The Guardians of the Galaxy Holiday Special',y:2022,rt:44,t:'sp',imp:0,u:'mcu',rel:'2022-11',w:'Disney+'},
+{id:'secretinv',n:'Secret Invasion',y:2023,rt:280,t:'tv',imp:0,u:'mcu',rel:'2023-06',w:'Disney+',eps:'6 eps'},
+{id:'loki2',n:'Loki — Season 2',y:2023,rt:279,t:'tv',imp:2,u:'mcu',rel:'2023-10',w:'Disney+',eps:'6 eps',note:'He Who Remains, the loom, and a god of stories.'},
+{id:'whatif2',n:'What If...? — Season 2',y:2023,rt:290,t:'tv',imp:2,u:'mcu',rel:'2023-12',w:'Disney+',eps:'9 eps',note:'Introduces a key Doomsday-adjacent storyline.'},
+{id:'echo',n:'Echo',y:2024,rt:230,t:'tv',imp:0,u:'mcu',rel:'2024-01',w:'Disney+',eps:'5 eps'},
+{id:'agatha',n:'Agatha All Along',y:2024,rt:320,t:'tv',imp:1,u:'mcu',rel:'2024-09',w:'Disney+',eps:'9 eps',note:'Wanda\u2019s legacy continues through Billy.'},
+{id:'whatif3',n:'What If...? — Season 3',y:2024,rt:260,t:'tv',imp:0,u:'mcu',rel:'2024-12',w:'Disney+',eps:'8 eps'},
+{id:'ddba',n:'Daredevil: Born Again',y:2025,rt:420,t:'tv',imp:1,u:'mcu',rel:'2025-03',w:'Disney+',eps:'9 eps',note:'Street-level MCU; the Punisher warms up for Brand New Day.'},
+{id:'ironheart',n:'Ironheart',y:2025,rt:280,t:'tv',imp:0,u:'mcu',rel:'2025-06',w:'Disney+',eps:'6 eps'},
+{id:'wonderman',n:'Wonder Man',y:2026,rt:240,t:'tv',imp:0,u:'mcu',rel:'2026-01',w:'Disney+',eps:'8 eps'},
+// ---- Netflix / Defenders Saga ----
+{id:'dd1',n:'Daredevil — Season 1',y:2015,rt:690,t:'tv',imp:1,u:'mcu',rel:'2015-04',w:'Disney+',eps:'13 eps',note:'Matt Murdock & Kingpin — feeds Born Again.'},
+{id:'jj1',n:'Jessica Jones — Season 1',y:2015,rt:640,t:'tv',imp:0,u:'mcu',rel:'2015-11',w:'Disney+',eps:'13 eps'},
+{id:'dd2',n:'Daredevil — Season 2',y:2016,rt:690,t:'tv',imp:1,u:'mcu',rel:'2016-03',w:'Disney+',eps:'13 eps',note:'The Punisher debuts — he\u2019s in Brand New Day.'},
+{id:'lc1',n:'Luke Cage — Season 1',y:2016,rt:680,t:'tv',imp:0,u:'mcu',rel:'2016-09',w:'Disney+',eps:'13 eps'},
+{id:'if1',n:'Iron Fist — Season 1',y:2017,rt:700,t:'tv',imp:0,u:'mcu',rel:'2017-03',w:'Disney+',eps:'13 eps'},
+{id:'def',n:'The Defenders',y:2017,rt:390,t:'tv',imp:0,u:'mcu',rel:'2017-08',w:'Disney+',eps:'8 eps'},
+{id:'pun1',n:'The Punisher — Season 1',y:2017,rt:660,t:'tv',imp:1,u:'mcu',rel:'2017-11',w:'Disney+',eps:'13 eps',note:'Frank Castle\u2019s full story before his big-screen return.'},
+{id:'jj2',n:'Jessica Jones — Season 2',y:2018,rt:660,t:'tv',imp:0,u:'mcu',rel:'2018-03',w:'Disney+',eps:'13 eps'},
+{id:'lc2',n:'Luke Cage — Season 2',y:2018,rt:690,t:'tv',imp:0,u:'mcu',rel:'2018-06',w:'Disney+',eps:'13 eps'},
+{id:'if2',n:'Iron Fist — Season 2',y:2018,rt:500,t:'tv',imp:0,u:'mcu',rel:'2018-09',w:'Disney+',eps:'10 eps'},
+{id:'dd3',n:'Daredevil — Season 3',y:2018,rt:690,t:'tv',imp:1,u:'mcu',rel:'2018-10',w:'Disney+',eps:'13 eps',note:'Peak Daredevil; Born Again picks up from here.'},
+{id:'pun2',n:'The Punisher — Season 2',y:2019,rt:690,t:'tv',imp:0,u:'mcu',rel:'2019-01',w:'Disney+',eps:'13 eps'},
+{id:'jj3',n:'Jessica Jones — Season 3',y:2019,rt:670,t:'tv',imp:0,u:'mcu',rel:'2019-06',w:'Disney+',eps:'13 eps'},
+// ---- FOX universe ----
+{id:'xmen',n:'X-Men',y:2000,rt:104,t:'m',imp:1,u:'fox',rel:'2000-07',w:'Disney+',note:'The X-Men are IN Doomsday. Meet the original cast.'},
+{id:'x2',n:'X2: X-Men United',y:2003,rt:134,t:'m',imp:0,u:'fox',rel:'2003-05',w:'Disney+'},
+{id:'x3',n:'X-Men: The Last Stand',y:2006,rt:104,t:'m',imp:0,u:'fox',rel:'2006-05',w:'Disney+'},
+{id:'ffox',n:'Fantastic Four',y:2005,rt:106,t:'m',imp:0,u:'fox',rel:'2005-07',w:'Disney+'},
+{id:'ff2fox',n:'Fantastic Four: Rise of the Silver Surfer',y:2007,rt:92,t:'m',imp:0,u:'fox',rel:'2007-06',w:'Disney+'},
+{id:'origins',n:'X-Men Origins: Wolverine',y:2009,rt:107,t:'m',imp:0,u:'fox',rel:'2009-05',w:'Disney+'},
+{id:'firstclass',n:'X-Men: First Class',y:2011,rt:131,t:'m',imp:1,u:'fox',rel:'2011-06',w:'Disney+',note:'Young Magneto & Professor X — faces you\u2019ll see again.'},
+{id:'wolverine',n:'The Wolverine',y:2013,rt:126,t:'m',imp:0,u:'fox',rel:'2013-07',w:'Disney+'},
+{id:'dofp',n:'X-Men: Days of Future Past',y:2014,rt:132,t:'m',imp:1,u:'fox',rel:'2014-05',w:'Disney+',note:'Fox\u2019s own multiverse story — great Doomsday homework.'},
+{id:'fant4',n:'Fantastic Four (2015)',y:2015,rt:100,t:'m',imp:0,u:'fox',rel:'2015-08',w:'Disney+'},
+{id:'deadpool',n:'Deadpool',y:2016,rt:108,t:'m',imp:1,u:'fox',rel:'2016-02',w:'Disney+',note:'Required for Deadpool & Wolverine.'},
+{id:'apocalypse',n:'X-Men: Apocalypse',y:2016,rt:144,t:'m',imp:0,u:'fox',rel:'2016-05',w:'Disney+'},
+{id:'logan',n:'Logan',y:2017,rt:137,t:'m',imp:1,u:'fox',rel:'2017-03',w:'Disney+',note:'Wolverine\u2019s "ending" — makes his return hit harder.'},
+{id:'dp2',n:'Deadpool 2',y:2018,rt:119,t:'m',imp:1,u:'fox',rel:'2018-05',w:'Disney+',note:'Cable, time travel, and the family Wade fights for.'},
+{id:'darkph',n:'Dark Phoenix',y:2019,rt:113,t:'m',imp:0,u:'fox',rel:'2019-06',w:'Disney+'},
+{id:'newmut',n:'The New Mutants',y:2020,rt:94,t:'m',imp:0,u:'fox',rel:'2020-08',w:'Disney+'},
+// ---- SONY universe ----
+{id:'sm1',n:'Spider-Man (2002)',y:2002,rt:121,t:'m',imp:1,u:'sony',rel:'2002-05',w:'Disney+',note:'Tobey\u2019s origin — pays off in No Way Home.'},
+{id:'sm2',n:'Spider-Man 2',y:2004,rt:127,t:'m',imp:1,u:'sony',rel:'2004-06',w:'Disney+',note:'Doc Ock. You\u2019ll want this before No Way Home.'},
+{id:'sm3',n:'Spider-Man 3',y:2007,rt:139,t:'m',imp:0,u:'sony',rel:'2007-05',w:'Disney+'},
+{id:'asm1',n:'The Amazing Spider-Man',y:2012,rt:136,t:'m',imp:1,u:'sony',rel:'2012-07',w:'Rent/Various',note:'Andrew\u2019s Peter — the emotional core of No Way Home.'},
+{id:'asm2',n:'The Amazing Spider-Man 2',y:2014,rt:142,t:'m',imp:0,u:'sony',rel:'2014-05',w:'Rent/Various'},
+{id:'venom',n:'Venom',y:2018,rt:112,t:'m',imp:0,u:'sony',rel:'2018-10',w:'Rent/Various'},
+{id:'itsv',n:'Spider-Man: Into the Spider-Verse',y:2018,rt:117,t:'m',imp:1,u:'sony',rel:'2018-12',w:'Rent/Various',note:'The best multiverse movie, full stop. Great date night.'},
+{id:'venom2',n:'Venom: Let There Be Carnage',y:2021,rt:97,t:'m',imp:0,u:'sony',rel:'2021-10',w:'Rent/Various'},
+{id:'morbius',n:'Morbius',y:2022,rt:104,t:'m',imp:0,u:'sony',rel:'2022-04',w:'Rent/Various'},
+{id:'atsv',n:'Spider-Man: Across the Spider-Verse',y:2023,rt:140,t:'m',imp:1,u:'sony',rel:'2023-06',w:'Rent/Various',note:'Multiverse canon events — thematically perfect prep.'},
+{id:'mweb',n:'Madame Web',y:2024,rt:116,t:'m',imp:0,u:'sony',rel:'2024-02',w:'Rent/Various'},
+{id:'venom3',n:'Venom: The Last Dance',y:2024,rt:109,t:'m',imp:0,u:'sony',rel:'2024-10',w:'Rent/Various'},
+{id:'kraven',n:'Kraven the Hunter',y:2024,rt:127,t:'m',imp:0,u:'sony',rel:'2024-12',w:'Rent/Various'},
+];
+const BY_ID = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
+
+/* Curated story order (roughly chronological, release-ordered where it matters) */
+const STORY_ORDER = [
+'cap1','firstclass','origins','cm','im1','hulk','im2','thor1',
+'sm1','sm2','sm3','xmen','x2','x3','ffox','ff2fox',
+'avengers','im3','thor2','caws','gotg','gotg2','dd1','jj1','wolverine','dofp',
+'aou','antman','dd2','lc1','if1','civilwar','bw','bp','smh','def','pun1','drs',
+'deadpool','asm1','asm2','jj2','lc2','if2','dd3','dp2','ragnarok','aw','jj3','pun2',
+'iw','apocalypse','darkph','newmut','endgame',
+'loki1','whatif1','wv','fatws','shangchi','eternals','venom','venom2','ffh','nwh',
+'hawkeye','moonknight','msmarvel','mom','shehulk','wbn','gotghol','lat','wf',
+'fant4','morbius','logan','quant','gotg3','secretinv','loki2','marvels','whatif2','echo',
+'mweb','kraven','venom3','dw','agatha','whatif3','ddba','itsv','atsv',
+'bnw','ironheart','wonderman','tbolts','ff','bnd','doomsday'
+];
+const SO_IDX = Object.fromEntries(STORY_ORDER.map((id,i)=>[id,i]));
+
+const TARGET = new Date('2026-12-18T00:00:00');
+const BND_DATE = new Date('2026-07-31T00:00:00');
+const DOOM_KEY = '2026-12-18';
+const KEY = 'ontiveros_doomsday_v1';
+
+const CUTE = [
+  "Popcorn duty: whoever checked in last. \u{1F37F}",
+  "Blanket rights are non-negotiable, Daisy. \u{1F33C}",
+  "Snack run before the intro logo. House rules.",
+  "No phones during the post-credit scene. \u{1F440}",
+  "Loser of rock-paper-scissors picks up the tamales.",
+  "Whoever falls asleep first owes a rewatch.",
+  "Subtitles on. This is a subtitles household now.",
+];
+
+let state = {
+  watched:{}, sched:{},
+  prefs:{path:'doom', order:'story', fox:false, spoil:false, cred:false, filter:'all'},
+  plan:{hpw:6, nights:[6,0], target:'2026-12-17'}
+};
+let saveTimer = null;
+let calY, calM;
+const NOW = new Date();
+const MIN_YM = NOW.getFullYear()*12 + NOW.getMonth();
+const MAX_YM = 2027*12 + 5;
+calY = NOW.getFullYear(); calM = NOW.getMonth();
+
+/* ---------------- storage ---------------- */
+function migrate(raw){
+  const base = {watched:{}, sched:{}, prefs:{...state.prefs}, plan:{...state.plan}};
+  if(raw && typeof raw === 'object'){
+    if(raw.watched || raw.sched || raw.prefs){
+      base.watched = raw.watched || {};
+      base.sched = raw.sched || {};
+      if(raw.prefs) base.prefs = {...base.prefs, ...raw.prefs};
+      if(raw.plan) base.plan = {...base.plan, ...raw.plan};
+    } else {
+      base.watched = raw; // v1 flat
+    }
+  }
+  return base;
+}
+/* ---------------- Firebase real-time storage ---------------- */
+let dbRef = null, dbReady = false;
+try{
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  // Uses your own private path name — keep it obscure, it's part of your "password"
+  dbRef = ref(db, 'ontiveros_doomsday_v1');
+  dbReady = true;
+}catch(e){
+  console.error('Firebase init failed', e);
+}
+
+let lastLocalEdit = 0;
+let savePending = false;
+
+function note(msg, isErr){
+  const n = document.getElementById('savenote');
+  n.textContent = msg;
+  n.classList.toggle('err', !!isErr);
+  n.classList.add('show');
+  if(!isErr) setTimeout(()=>n.classList.remove('show'), 1400);
+}
+
+function loadState(){
+  if(!dbReady || !dbRef){
+    note('Database not connected — paste your Firebase config into the file (Step 1 comment at the top of the script).', true);
+    return;
+  }
+  // Live listener: the moment Daisy taps on her phone, this fires on yours.
+  onValue(dbRef, (snapshot)=>{
+    // Ignore echoes for a moment after our own taps so nothing flickers or reverts
+    if(Date.now() - lastLocalEdit < 1500) return;
+    const val = snapshot.val();
+    if(val){
+      state = migrate(val);
+      syncControlsFromState();
+      renderAll();
+    } else {
+      // first run ever: seed the database with the starting state
+      doSave(0);
+    }
+  }, (err)=>{
+    console.error('read failed', err);
+    note("Can't reach the database — check your internet or the database rules.", true);
+  });
+}
+
+async function doSave(attempt){
+  attempt = attempt || 0;
+  if(!dbReady || !dbRef){
+    note('Database not connected — paste your Firebase config into the file first.', true);
+    return;
+  }
+  lastLocalEdit = Date.now();
+  try{
+    await set(dbRef, JSON.parse(JSON.stringify(state)));
+    savePending = false;
+    note('Saved \u2713', false);
+  }catch(e){
+    console.error('save attempt '+(attempt+1)+' failed', e);
+    if(attempt < 3){
+      note('Saving\u2026', false);
+      setTimeout(()=>doSave(attempt+1), (attempt+1)*1500);
+    } else {
+      savePending = true;
+      note("Couldn't save \u2014 I'll keep retrying. Your taps are safe on this screen.", true);
+    }
+  }
+}
+function queueSave(){
+  lastLocalEdit = Date.now();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>doSave(0), 500);
+}
+// background retry loop: if a save is stuck, try again every 20s until it lands
+setInterval(()=>{ if(savePending) doSave(0); }, 20000);
+
+/* ---------------- helpers ---------------- */
+function get(id){ return state.watched[id] || {m:false, d:false}; }
+function isDone(id){ const s=get(id); return s.m && s.d; }
+function two(x){ return String(x).padStart(2,'0'); }
+function keyOf(y,m,d){ return y+'-'+two(m+1)+'-'+two(d); }
+function todayKey(){ const t=new Date(); return keyOf(t.getFullYear(),t.getMonth(),t.getDate()); }
+function prettyDate(k){
+  const [y,m,d] = k.split('-').map(Number);
+  return new Date(y,m-1,d).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+}
+function prettyDateFull(dt){
+  return dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+}
+function schedForDay(k){ return Object.entries(state.sched).filter(([,v])=>v===k).map(([id])=>id); }
+function runtimeOf(it){ return it.rt + (state.prefs.cred && (it.t==='m'||it.t==='ms') ? 8 : 0); }
+
+/* Active set = pathway ∩ universes (never includes unreleased) */
+function activeSet(){
+  const p = state.prefs.path;
+  return ITEMS.filter(it=>{
+    if(it.up) return false;
+    if((it.u==='fox'||it.u==='sony') && !state.prefs.fox) return false;
+    if(p==='doom' && it.imp<1) return false;
+    if(p==='ess' && it.imp<2) return false;
+    return true;
+  });
+}
+function orderedActive(){
+  const set = activeSet();
+  if(state.prefs.order==='story') return set.slice().sort((a,b)=>(SO_IDX[a.id]??999)-(SO_IDX[b.id]??999));
+  return set.slice().sort((a,b)=>a.rel.localeCompare(b.rel));
+}
+
+/* ---------------- countdown ---------------- */
+function tick(){
+  let diff = TARGET - new Date();
+  if(diff<0) diff=0;
+  document.getElementById('cd-d').textContent = Math.floor(diff/86400000);
+  document.getElementById('cd-h').textContent = two(Math.floor(diff/3600000)%24);
+  document.getElementById('cd-m').textContent = two(Math.floor(diff/60000)%60);
+  document.getElementById('cd-s').textContent = two(Math.floor(diff/1000)%60);
+  const db = Math.max(0, Math.ceil((BND_DATE - new Date())/86400000));
+  const dd = Math.max(0, Math.ceil((TARGET - new Date())/86400000));
+  document.getElementById('up-bnd').textContent = db===0 ? 'NOW PLAYING \u{1F578}\uFE0F' : db + ' days away \u{1F578}\uFE0F';
+  document.getElementById('up-doom').textContent = dd + ' days away';
+}
+setInterval(tick,1000); tick();
+
+/* ---------------- next date night ---------------- */
+function renderNextNight(){
+  const box = document.getElementById('nextnight');
+  const tk = todayKey();
+  const upcoming = Object.entries(state.sched)
+    .filter(([id,k]) => !isDone(id) && k >= tk)
+    .sort((a,b)=>a[1].localeCompare(b[1]));
+  if(!upcoming.length){ box.classList.add('hidden'); return; }
+  const [id,k] = upcoming[0];
+  const it = BY_ID[id]; if(!it){ box.classList.add('hidden'); return; }
+  const days = Math.round((new Date(k)-new Date(tk))/86400000);
+  const whenTxt = days===0 ? '<b>TONIGHT!</b>' : days===1 ? '<b>tomorrow</b>' : 'in <b>'+days+' days</b>';
+  const cute = CUTE[(id.length+days)%CUTE.length];
+  box.innerHTML =
+    '<div class="pop">\u{1F37F}</div>'+
+    '<div><div class="lbl">NEXT MOVIE NIGHT</div>'+
+    '<div class="movie">'+it.n+'</div>'+
+    '<div class="when">'+prettyDate(k)+' &bull; '+whenTxt+' &bull; '+(it.eps?it.eps:it.rt+' min')+'</div></div>'+
+    '<div class="cute">'+cute+'</div>';
+  box.classList.remove('hidden');
+}
+
+/* ---------------- watchlist ---------------- */
+function typeBadge(it){
+  if(it.t==='tv') return '<span class="badge type-tv">TV</span>';
+  if(it.t==='sp') return '<span class="badge type-sp">SPECIAL</span>';
+  if(it.t==='ms') return '<span class="badge type-ms">MILESTONE</span>';
+  return '';
+}
+function impMark(it){
+  if(it.imp===2) return '<span class="imp2">&#9733;</span>';
+  if(it.imp===1) return '<span class="imp1">&#10022;</span>';
+  return '';
+}
+function renderList(){
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  const f = state.prefs.filter;
+  let items = orderedActive();
+
+  // append upcoming titles at the end (visible, but the destination)
+  const ups = ITEMS.filter(it=>it.up && (state.prefs.path!=='ess' || it.imp===2) && (state.prefs.path!=='doom' || it.imp>=1));
+  items = items.concat(state.prefs.order==='story'
+    ? ups.sort((a,b)=>(SO_IDX[a.id]??999)-(SO_IDX[b.id]??999))
+    : ups.sort((a,b)=>a.rel.localeCompare(b.rel)));
+
+  let shown = 0, order = 0;
+  items.forEach(it=>{
+    order++;
+    const st = get(it.id);
+    const done = st.m && st.d;
+    if(f==='unwatched' && done) return;
+    if(f==='films' && !(it.t==='m'||it.t==='ms')) return;
+    if(f==='tv' && !(it.t==='tv'||it.t==='sp')) return;
+    shown++;
+
+    const sk = state.sched[it.id];
+    const row = document.createElement('div');
+    row.className = 'row t-'+it.t + (done?' done':'') + (it.up?' up':'');
+    row.innerHTML = `
+      <div class="ord">${done ? '&#10003;' : String(order).padStart(2,'0')}</div>
+      <div>
+        <div class="title">${impMark(it)}${it.n}</div>
+        <div class="meta">
+          <span>${it.y}</span><span>&bull;</span>
+          <span>${it.eps ? it.eps : it.rt+' min'}</span>
+          ${typeBadge(it)}
+          ${it.up ? '<span class="badge theater">'+it.w.toUpperCase()+'</span>' : '<span class="badge stream">'+it.w+'</span>'}
+          ${(it.u==='fox') ? '<span class="badge uni">FOX</span>' : ''}
+          ${(it.u==='sony') ? '<span class="badge uni">SONY</span>' : ''}
+          ${sk && !done ? '<span class="badge sched" data-goto="'+sk+'">&#128197; '+prettyDate(sk)+'</span>' : ''}
+          ${done ? '<span class="together">WATCHED TOGETHER &#128155;</span>' : ''}
+        </div>
+        ${state.prefs.spoil && it.note ? '<div class="note">'+it.note+'</div>' : ''}
+      </div>
+      <div class="tgls">
+        ${!done && !it.up ? '<button class="calbtn" title="Schedule movie night" aria-label="Schedule '+it.n+'" data-cal="'+it.id+'">&#128197;</button>' : ''}
+        <button class="tgl m ${st.m?'on':''}" aria-pressed="${st.m}" aria-label="Misa watched ${it.n}" data-id="${it.id}" data-p="m">M</button>
+        <button class="tgl d ${st.d?'on':''}" aria-pressed="${st.d}" aria-label="Daisy watched ${it.n}" data-id="${it.id}" data-p="d">D</button>
+      </div>`;
+    list.appendChild(row);
+  });
+
+  if(!shown){
+    const e = document.createElement('div');
+    e.className='empty'; e.textContent='No matching titles found.';
+    list.appendChild(e);
+  }
+
+  list.querySelectorAll('.tgl').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const id=b.dataset.id, p=b.dataset.p;
+      if(!state.watched[id]) state.watched[id]={m:false,d:false};
+      state.watched[id][p] = !state.watched[id][p];
+      queueSave(); renderAll();
+      if(isDone(id)){
+        const doneRow = b.closest('.row');
+        if(doneRow && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+          const s=document.createElement('div');
+          s.className='burst'; s.textContent='\u{1F49B}\u2728\u{1F33C}\u2728\u{1F49A}';
+          doneRow.appendChild(s); setTimeout(()=>s.remove(),950);
+        }
+      }
+    });
+  });
+  list.querySelectorAll('[data-cal]').forEach(b=>{
+    b.addEventListener('click', ()=> openMovieScheduler(b.dataset.cal));
+  });
+  list.querySelectorAll('[data-goto]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const [y,m] = b.dataset.goto.split('-').map(Number);
+      calY=y; calM=m-1; showView('cal');
+    });
+  });
+}
+
+function renderStats(){
+  const set = activeSet();
+  const total = set.length;
+  let cm=0,cd=0,ct=0,essLeft=0,minsLeft=0;
+  set.forEach(it=>{
+    const st=get(it.id);
+    if(st.m) cm++;
+    if(st.d) cd++;
+    if(st.m&&st.d) ct++;
+    else{
+      minsLeft += runtimeOf(it);
+      if(it.imp===2) essLeft++;
+    }
+  });
+  document.getElementById('st-total').textContent = total;
+  document.getElementById('st-watched').textContent = ct;
+  document.getElementById('st-remain').textContent = total-ct;
+  document.getElementById('st-essleft').textContent = essLeft;
+  document.getElementById('st-hours').textContent = Math.round(minsLeft/60);
+
+  document.getElementById('stat-m').textContent = cm+' / '+total;
+  document.getElementById('stat-d').textContent = cd+' / '+total;
+  document.getElementById('stat-t').textContent = ct+' / '+total;
+  document.getElementById('bar-m').style.width = total? (cm/total*100)+'%' : '0%';
+  document.getElementById('bar-d').style.width = total? (cd/total*100)+'%' : '0%';
+  document.getElementById('bar-t').style.width = total? (ct/total*100)+'%' : '0%';
+
+  const daysLeft = Math.max(1, Math.ceil((TARGET-new Date())/86400000));
+  const weeksLeft = daysLeft/7;
+  const remaining = total-ct;
+  const pace = document.getElementById('pace');
+  if(remaining===0 && total>0){
+    pace.innerHTML = '<span class="ok">MISSION COMPLETE.</span> You two are fully armed for Doomsday. See you at the theater. \u{1F49A}\u{1F33C}';
+  } else {
+    const hrs = Math.round(minsLeft/60);
+    const hpw = Math.ceil(minsLeft/60/weeksLeft*10)/10;
+    pace.innerHTML =
+      '<b>'+remaining+'</b> left on this pathway &bull; <b>'+hrs+' hrs</b> of couch time &bull; '+
+      'to finish before premiere: <b class="ok">'+hpw+' hrs/week</b>';
+  }
+}
+
+/* ---------------- viewing planner ---------------- */
+function syncControlsFromState(){
+  const p = state.prefs;
+  document.querySelectorAll('.path').forEach(x=>x.classList.toggle('on', x.dataset.path===p.path));
+  document.getElementById('ord-story').classList.toggle('on', p.order==='story');
+  document.getElementById('ord-release').classList.toggle('on', p.order==='release');
+  document.querySelectorAll('.chips .chip[data-f]').forEach(c=>c.classList.toggle('on', c.dataset.f===p.filter));
+  document.getElementById('tg-fox').classList.toggle('on', p.fox);
+  document.getElementById('tg-spoil').classList.toggle('on', p.spoil);
+  document.getElementById('tg-cred').classList.toggle('on', p.cred);
+  document.getElementById('pl-hpw').value = state.plan.hpw;
+  document.getElementById('pl-target').value = state.plan.target;
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.toggle('on', state.plan.nights.includes(Number(b.dataset.n))));
+}
+
+function generateSchedule(){
+  state.plan.hpw = Math.max(1, Number(document.getElementById('pl-hpw').value)||6);
+  state.plan.target = document.getElementById('pl-target').value || '2026-12-17';
+  const nights = [...document.querySelectorAll('.nbtn.on')].map(b=>Number(b.dataset.n));
+  state.plan.nights = nights.length ? nights : [6];
+
+  const queue = orderedActive().filter(it=>!isDone(it.id));
+  // wipe old schedule for these ids
+  queue.forEach(it=>{ delete state.sched[it.id]; });
+  if(!queue.length){ queueSave(); renderAll(); showVerdict(null,0); return; }
+
+  const perNight = (state.plan.hpw / state.plan.nights.length) * 60; // mins per night
+  let qi = 0, lastDate = null;
+  const d = new Date(); d.setDate(d.getDate()+1);
+  const horizon = new Date(); horizon.setFullYear(horizon.getFullYear()+3);
+
+  while(qi < queue.length && d <= horizon){
+    if(state.plan.nights.includes(d.getDay())){
+      const k = keyOf(d.getFullYear(), d.getMonth(), d.getDate());
+      if(k !== DOOM_KEY){
+        let nightMins = 0;
+        while(qi < queue.length){
+          const it = queue[qi];
+          const rm = runtimeOf(it);
+          if(nightMins > 0 && nightMins + rm > perNight * 1.35) break;
+          state.sched[it.id] = k;
+          nightMins += rm;
+          lastDate = new Date(d);
+          qi++;
+          if(nightMins >= perNight) break;
+        }
+      }
+    }
+    d.setDate(d.getDate()+1);
+  }
+  queueSave();
+  renderAll();
+  showVerdict(lastDate, queue.length);
+}
+function showVerdict(lastDate, count){
+  const v = document.getElementById('pl-verdict');
+  if(!lastDate){ v.className='verdict ok'; v.innerHTML='Nothing left to schedule on this pathway — you\u2019re ready. \u{1F389}'; return; }
+  const target = new Date(state.plan.target+'T23:59:59');
+  const doom = new Date('2026-12-17T23:59:59');
+  const finish = prettyDateFull(lastDate);
+  if(lastDate <= doom && lastDate <= target){
+    const spare = Math.floor((doom - lastDate)/86400000);
+    v.className='verdict ok';
+    v.innerHTML='&#10003; ON TRACK &mdash; '+count+' titles booked. You\u2019ll finish <b>'+finish+'</b>, with <b>'+spare+' days to spare</b> before Doomsday. \u{1F37F}\u{1F49A}';
+  } else if(lastDate <= doom){
+    v.className='verdict ok';
+    v.innerHTML='&#10003; You\u2019ll finish <b>'+finish+'</b> — after your target, but still before Doomsday. Close enough for love. \u{1F60C}';
+  } else {
+    const over = Math.ceil((lastDate - doom)/86400000);
+    v.className='verdict bad';
+    v.innerHTML='&#9888; AT THIS PACE YOU\u2019LL MISS IT &mdash; projected finish <b>'+finish+'</b>, '+over+' days AFTER Doomsday. Add hours, add nights, or switch to a lighter pathway. Doom waits for no one.';
+  }
+}
+function renderDash(){
+  const dash = document.getElementById('dash');
+  const tk = todayKey();
+  let sched=0, behind=0, done=0;
+  Object.entries(state.sched).forEach(([id,k])=>{
+    sched++;
+    if(isDone(id)) done++;
+    else if(k < tk) behind++;
+  });
+  if(!sched){ dash.innerHTML='No movie nights booked yet. Hit <b>Generate</b> or tap a day below. \u{1F447}'; return; }
+  dash.innerHTML = '<b>'+sched+'</b> nights booked &bull; <b class="ok">'+done+'</b> completed'+
+    (behind ? ' &bull; <b style="color:#FFB9AE">'+behind+' behind schedule</b> (tap them to fix — no judgment)' : ' &bull; right on schedule \u2728');
+}
+
+/* ---------------- calendar ---------------- */
+const MONTHS=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+function renderCal(){
+  const ym = calY*12+calM;
+  document.getElementById('cal-prev').disabled = ym<=MIN_YM;
+  document.getElementById('cal-next').disabled = ym>=MAX_YM;
+  document.getElementById('cal-title').textContent = MONTHS[calM]+' '+calY;
+  const grid = document.getElementById('grid');
+  grid.innerHTML='';
+  const first = new Date(calY,calM,1).getDay();
+  const daysIn = new Date(calY,calM+1,0).getDate();
+  const tk = todayKey();
+  for(let i=0;i<first;i++){ const b=document.createElement('div'); b.className='day blank'; grid.appendChild(b); }
+  for(let d=1;d<=daysIn;d++){
+    const k = keyOf(calY,calM,d);
+    const dow = new Date(calY,calM,d).getDay();
+    const cell = document.createElement('button');
+    cell.className='day'+(k===tk?' today':'')+(k<tk?' past':'')+((dow===0||dow===6)?' weekend':'')+(k===DOOM_KEY?' doom':'');
+    cell.setAttribute('aria-label', prettyDate(k));
+    let inner = '<span class="n">'+d+'</span>';
+    if(k===DOOM_KEY) inner += '<span class="doomtag">DOOMSDAY &#127909;</span>';
+    schedForDay(k).forEach(id=>{
+      const it=BY_ID[id]; if(!it) return;
+      const done=isDone(id), late=!done&&k<tk;
+      inner += '<span class="ev'+(done?' done':'')+(late?' late':'')+'">'+(done?'&#10003; ':'')+it.n+'</span>';
+    });
+    cell.innerHTML = inner;
+    cell.addEventListener('click', ()=>openDayModal(k));
+    grid.appendChild(cell);
+  }
+}
+document.getElementById('cal-prev').addEventListener('click',()=>{calM--;if(calM<0){calM=11;calY--;}renderCal();});
+document.getElementById('cal-next').addEventListener('click',()=>{calM++;if(calM>11){calM=0;calY++;}renderCal();});
+
+/* ---------------- modal ---------------- */
+const overlay = document.getElementById('overlay');
+function closeModal(){ overlay.classList.remove('show'); }
+document.getElementById('modal-close').addEventListener('click', closeModal);
+overlay.addEventListener('click',(e)=>{ if(e.target===overlay) closeModal(); });
+document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeModal(); });
+
+function openDayModal(k){
+  const title=document.getElementById('modal-title');
+  const md=document.getElementById('modal-date');
+  const opts=document.getElementById('modal-opts');
+  md.textContent = prettyDate(k) + (k===DOOM_KEY ? ' — PREMIERE NIGHT' : '');
+  opts.innerHTML='';
+  const booked = schedForDay(k);
+
+  if(k===DOOM_KEY){
+    title.textContent='This one\u2019s already booked \u{1F60F}';
+    const o=document.createElement('div');
+    o.className='opt dn';
+    o.innerHTML='Avengers: Doomsday \u2014 you, Daisy, a giant screen.<small>Non-refundable. Non-reschedulable. Bring tissues just in case.</small>';
+    opts.appendChild(o);
+    overlay.classList.add('show');
+    return;
+  }
+  if(booked.length){
+    title.textContent='Movie night: '+prettyDate(k);
+    booked.forEach(id=>{
+      const it=BY_ID[id]; if(!it) return;
+      if(!isDone(id)){
+        const dn=document.createElement('button');
+        dn.className='opt dn';
+        dn.innerHTML='&#10003; We watched '+it.n+'!<small>Marks it done for both of you \u{1F49A}\u{1F49B}</small>';
+        dn.addEventListener('click',()=>{
+          state.watched[id]={m:true,d:true};
+          queueSave(); closeModal(); renderAll();
+        });
+        opts.appendChild(dn);
+      }
+      const rm=document.createElement('button');
+      rm.className='opt rm';
+      rm.innerHTML='Unschedule '+it.n+'<small>Life happens. No judgment.</small>';
+      rm.addEventListener('click',()=>{
+        delete state.sched[id];
+        queueSave(); closeModal(); renderAll();
+      });
+      opts.appendChild(rm);
+    });
+    const add=document.createElement('button');
+    add.className='opt';
+    add.innerHTML='+ Add another title this night<small>Double feature energy</small>';
+    add.addEventListener('click',()=>fillMovieOptions(k));
+    opts.appendChild(add);
+  } else {
+    title.textContent='Book a movie night \u{1F37F}';
+    fillMovieOptions(k);
+  }
+  overlay.classList.add('show');
+}
+function fillMovieOptions(k){
+  const opts=document.getElementById('modal-opts');
+  document.getElementById('modal-title').textContent='Pick the title \u{1F37F}';
+  opts.innerHTML='';
+  const avail = orderedActive().filter(it=>!isDone(it.id));
+  if(!avail.length){
+    const o=document.createElement('div');
+    o.className='opt dn';
+    o.innerHTML='Nothing left to schedule on this pathway!<small>Now you just wait for Doomsday.</small>';
+    opts.appendChild(o);
+    return;
+  }
+  avail.forEach(it=>{
+    const cur=state.sched[it.id];
+    const o=document.createElement('button');
+    o.className='opt';
+    o.innerHTML=it.n+'<small>'+(it.eps?it.eps:it.rt+' min')+(cur?' \u2022 currently '+prettyDate(cur)+' (will move)':'')+'</small>';
+    o.addEventListener('click',()=>{
+      state.sched[it.id]=k;
+      queueSave(); closeModal(); renderAll();
+    });
+    opts.appendChild(o);
+  });
+}
+function openMovieScheduler(id){
+  showView('cal');
+  const it=BY_ID[id];
+  const title=document.getElementById('modal-title');
+  const md=document.getElementById('modal-date');
+  const opts=document.getElementById('modal-opts');
+  title.textContent='Schedule: '+it.n;
+  md.textContent='Quick picks, or close this and tap any day on the calendar';
+  opts.innerHTML='';
+  const picks = upcomingNights(5);
+  picks.forEach(k=>{
+    const o=document.createElement('button');
+    o.className='opt';
+    o.innerHTML=prettyDate(k)+'<small>'+(schedForDay(k).length?'Already a movie night \u2014 double feature!':'Free evening')+'</small>';
+    o.addEventListener('click',()=>{
+      state.sched[id]=k;
+      queueSave(); closeModal(); renderAll();
+    });
+    opts.appendChild(o);
+  });
+  overlay.classList.add('show');
+}
+function upcomingNights(count){
+  const out=[];
+  const nights = state.plan.nights.length ? state.plan.nights : [5,6,0];
+  const d=new Date(); d.setDate(d.getDate()+1);
+  const end=new Date(); end.setFullYear(end.getFullYear()+2);
+  while(d<=end && out.length<count){
+    if(nights.includes(d.getDay())){
+      const k=keyOf(d.getFullYear(),d.getMonth(),d.getDate());
+      if(k!==DOOM_KEY) out.push(k);
+    }
+    d.setDate(d.getDate()+1);
+  }
+  return out;
+}
+
+/* ---------------- controls wiring ---------------- */
+document.querySelectorAll('.path').forEach(p=>{
+  p.addEventListener('click',()=>{
+    state.prefs.path = p.dataset.path;
+    queueSave(); syncControlsFromState(); renderAll();
+  });
+});
+document.getElementById('ord-story').addEventListener('click',()=>{
+  state.prefs.order='story'; queueSave(); syncControlsFromState(); renderList();
+});
+document.getElementById('ord-release').addEventListener('click',()=>{
+  state.prefs.order='release'; queueSave(); syncControlsFromState(); renderList();
+});
+document.querySelectorAll('.chips .chip[data-f]').forEach(c=>{
+  c.addEventListener('click',()=>{
+    state.prefs.filter=c.dataset.f;
+    queueSave(); syncControlsFromState(); renderList();
+  });
+});
+document.getElementById('tg-fox').addEventListener('click',()=>{
+  state.prefs.fox=!state.prefs.fox; queueSave(); syncControlsFromState(); renderAll();
+});
+document.getElementById('tg-spoil').addEventListener('click',()=>{
+  state.prefs.spoil=!state.prefs.spoil; queueSave(); syncControlsFromState(); renderList();
+});
+document.getElementById('tg-cred').addEventListener('click',()=>{
+  state.prefs.cred=!state.prefs.cred; queueSave(); syncControlsFromState(); renderStats();
+});
+document.querySelectorAll('.nbtn').forEach(b=>{
+  b.addEventListener('click',()=>{ b.classList.toggle('on'); });
+});
+document.getElementById('pl-gen').addEventListener('click', generateSchedule);
+document.getElementById('pl-clear').addEventListener('click',()=>{
+  state.sched={};
+  queueSave(); renderAll();
+  const v=document.getElementById('pl-verdict'); v.className='verdict'; v.innerHTML='';
+});
+
+/* ---------------- tabs ---------------- */
+function showView(v){
+  const isCal = v==='cal';
+  document.getElementById('view-list').classList.toggle('hidden', isCal);
+  document.getElementById('view-cal').classList.toggle('hidden', !isCal);
+  document.getElementById('tab-list').classList.toggle('on', !isCal);
+  document.getElementById('tab-list').setAttribute('aria-selected', String(!isCal));
+  document.getElementById('tab-cal').classList.toggle('on', isCal);
+  document.getElementById('tab-cal').setAttribute('aria-selected', String(isCal));
+  if(isCal){ renderCal(); renderDash(); }
+}
+document.getElementById('tab-list').addEventListener('click',()=>showView('list'));
+document.getElementById('tab-cal').addEventListener('click',()=>showView('cal'));
+
+document.getElementById('sync').addEventListener('click', ()=>{
+  if(savePending){ doSave(0); } else { note('Live sync is on \u2014 changes appear automatically \u2728', false); }
+});
+// if a save got stuck while the app was in the background, flush it on return
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden && savePending) doSave(0);
+});
+
+/* ---------------- boot ---------------- */
+function renderAll(){
+  renderList();
+  renderStats();
+  renderNextNight();
+  renderDash();
+  if(!document.getElementById('view-cal').classList.contains('hidden')) renderCal();
+}
+renderAll();
+loadState();
+</script>
+</body>
+</html>
