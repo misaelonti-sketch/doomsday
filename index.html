@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ontiveros Road to Doomsday</title>
+<link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0A0F0C">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="./manifest.json">
 <meta name="apple-mobile-web-app-title" content="Doomsday">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <link rel="icon" href="./icon-192.png">
@@ -157,7 +157,7 @@
   /* list */
   .list{display:flex;flex-direction:column;gap:8px}
   .row{
-    display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;
+    display:grid;grid-template-columns:46px 1fr auto;gap:10px;align-items:center;
     background:var(--panel-solid);border:1px solid var(--line);border-radius:var(--radius);
     padding:12px 13px;transition:border-color .2s, background .2s;position:relative;overflow:hidden;
     border-left:3px solid var(--emerald-deep);
@@ -165,6 +165,15 @@
   .row.t-tv{border-left-color:var(--tv)}
   .row.t-sp{border-left-color:var(--special)}
   .row.t-ms{border-left-color:var(--mile)}
+  .poster{position:relative;width:46px;height:69px;border-radius:8px;overflow:hidden;flex-shrink:0;
+    background:linear-gradient(160deg,#1a2620,#0c120e);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center}
+  .poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s}
+  .poster img.loaded{opacity:1}
+  .poster .ph{font-size:18px;opacity:.45}
+  .poster .ord{position:absolute;left:0;right:0;bottom:0;text-align:center;
+    font-family:'IBM Plex Mono',monospace;font-size:9px;padding:1px 0;background:rgba(0,0,0,.55);color:var(--silver)}
+  .row.done .poster .ord{color:var(--emerald-glow)}
   .row.done{border-color:rgba(67,245,140,.35);background:linear-gradient(90deg, rgba(47,191,113,.10), rgba(242,201,76,.06))}
   .row.up{border-style:dashed;opacity:.9}
   .ord{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--silver);text-align:center}
@@ -198,7 +207,8 @@
   .calbtn{width:38px;height:38px;border-radius:10px;cursor:pointer;border:1px solid var(--line);background:#0C120E;font-size:15px;transition:all .15s}
   .calbtn:hover{transform:translateY(-1px);border-color:var(--daisy)}
   @media(max-width:520px){
-    .row{grid-template-columns:26px 1fr auto;padding:11px 9px;gap:7px}
+    .row{grid-template-columns:38px 1fr auto;padding:11px 9px;gap:8px}
+    .poster{width:38px;height:57px}
     .tgl{width:36px;height:35px}.calbtn{width:34px;height:35px}
   }
   .burst{position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:22px;animation:burst .9s ease forwards}
@@ -505,7 +515,7 @@
         .catch(err => console.error('SW Failed:', err));
     });
   }
-    </script>
+</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -534,111 +544,115 @@ const firebaseConfig = {
    up: not released yet    w: where to watch
 ============================================================ */
 const ITEMS = [
-// ---- MCU films ----
-{id:'im1',n:'Iron Man',y:2008,rt:126,t:'m',imp:2,u:'mcu',rel:'2008-05',w:'Disney+',note:'Where it all begins — and the face of Doom is very familiar.'},
-{id:'hulk',n:'The Incredible Hulk',y:2008,rt:112,t:'m',imp:0,u:'mcu',rel:'2008-06',w:'Disney+'},
-{id:'im2',n:'Iron Man 2',y:2010,rt:124,t:'m',imp:1,u:'mcu',rel:'2010-05',w:'Disney+',note:'Black Widow debuts; Tony\u2019s legacy deepens.'},
-{id:'thor1',n:'Thor',y:2011,rt:115,t:'m',imp:1,u:'mcu',rel:'2011-05',w:'Disney+',note:'Meet Thor and Loki — both matter enormously later.'},
-{id:'cap1',n:'Captain America: The First Avenger',y:2011,rt:124,t:'m',imp:2,u:'mcu',rel:'2011-07',w:'Disney+',note:'The heart of the Avengers. Story-order starting line.'},
-{id:'avengers',n:'The Avengers',y:2012,rt:143,t:'ms',imp:2,u:'mcu',rel:'2012-05',w:'Disney+',note:'The team assembles. Loki\u2019s scepter starts everything.'},
-{id:'im3',n:'Iron Man 3',y:2013,rt:130,t:'m',imp:1,u:'mcu',rel:'2013-05',w:'Disney+',note:'Tony\u2019s anxiety arc — echoes into who Doom is.'},
-{id:'thor2',n:'Thor: The Dark World',y:2013,rt:112,t:'m',imp:0,u:'mcu',rel:'2013-11',w:'Disney+'},
-{id:'caws',n:'Captain America: The Winter Soldier',y:2014,rt:136,t:'m',imp:2,u:'mcu',rel:'2014-04',w:'Disney+',note:'Bucky returns. Sets up Sam, Bucky, and Thunderbolts threads.'},
-{id:'gotg',n:'Guardians of the Galaxy',y:2014,rt:121,t:'m',imp:1,u:'mcu',rel:'2014-08',w:'Disney+',note:'Cosmic MCU opens up; infinity stones explained.'},
-{id:'aou',n:'Avengers: Age of Ultron',y:2015,rt:141,t:'ms',imp:2,u:'mcu',rel:'2015-05',w:'Disney+',note:'Vision & Wanda arrive; the team starts to fracture.'},
-{id:'antman',n:'Ant-Man',y:2015,rt:117,t:'m',imp:1,u:'mcu',rel:'2015-07',w:'Disney+',note:'The Quantum Realm — the multiverse\u2019s back door.'},
-{id:'civilwar',n:'Captain America: Civil War',y:2016,rt:147,t:'m',imp:2,u:'mcu',rel:'2016-05',w:'Disney+',note:'The Avengers break up. Everyone\u2019s status quo shifts.'},
-{id:'drs',n:'Doctor Strange',y:2016,rt:115,t:'m',imp:2,u:'mcu',rel:'2016-11',w:'Disney+',note:'Magic + multiverse rules 101.'},
-{id:'gotg2',n:'Guardians of the Galaxy Vol. 2',y:2017,rt:136,t:'m',imp:1,u:'mcu',rel:'2017-05',w:'Disney+',note:'Family themes that pay off in Infinity War.'},
-{id:'smh',n:'Spider-Man: Homecoming',y:2017,rt:133,t:'m',imp:1,u:'mcu',rel:'2017-07',w:'Disney+',note:'Peter\u2019s MCU story begins — leads to Brand New Day.'},
-{id:'ragnarok',n:'Thor: Ragnarok',y:2017,rt:130,t:'m',imp:2,u:'mcu',rel:'2017-11',w:'Disney+',note:'Thor\u2019s reinvention; walks straight into Infinity War.'},
-{id:'bp',n:'Black Panther',y:2018,rt:134,t:'m',imp:2,u:'mcu',rel:'2018-02',w:'Disney+',note:'Wakanda — central to Doomsday\u2019s alliances.'},
-{id:'iw',n:'Avengers: Infinity War',y:2018,rt:149,t:'ms',imp:2,u:'mcu',rel:'2018-04',w:'Disney+',note:'The snap. Non-negotiable.'},
-{id:'aw',n:'Ant-Man and the Wasp',y:2018,rt:118,t:'m',imp:1,u:'mcu',rel:'2018-07',w:'Disney+',note:'Quantum Realm deep dive that enables Endgame.'},
-{id:'cm',n:'Captain Marvel',y:2019,rt:123,t:'m',imp:1,u:'mcu',rel:'2019-03',w:'Disney+',note:'Carol\u2019s origin; sets up The Marvels.'},
-{id:'endgame',n:'Avengers: Endgame',y:2019,rt:181,t:'ms',imp:2,u:'mcu',rel:'2019-04',w:'Disney+',note:'The Infinity Saga payoff. Watch (or rewatch) before Doomsday.'},
-{id:'ffh',n:'Spider-Man: Far From Home',y:2019,rt:129,t:'m',imp:1,u:'mcu',rel:'2019-07',w:'Disney+',note:'The world after Endgame; Peter\u2019s identity exposed.'},
-{id:'bw',n:'Black Widow',y:2021,rt:134,t:'m',imp:1,u:'mcu',rel:'2021-07',w:'Disney+',note:'Yelena\u2019s debut — she leads into Thunderbolts*.'},
-{id:'shangchi',n:'Shang-Chi and the Legend of the Ten Rings',y:2021,rt:132,t:'m',imp:2,u:'mcu',rel:'2021-09',w:'Disney+',note:'The Ten Rings are signaling... something for the Saga.'},
-{id:'eternals',n:'Eternals',y:2021,rt:156,t:'m',imp:0,u:'mcu',rel:'2021-11',w:'Disney+'},
-{id:'nwh',n:'Spider-Man: No Way Home',y:2021,rt:148,t:'m',imp:2,u:'mcu',rel:'2021-12',w:'Disney+',note:'The multiverse cracks open on screen for the first time.'},
-{id:'mom',n:'Doctor Strange in the Multiverse of Madness',y:2022,rt:126,t:'m',imp:2,u:'mcu',rel:'2022-05',w:'Disney+',note:'Incursions + the Illuminati — core Doomsday rules.'},
-{id:'lat',n:'Thor: Love and Thunder',y:2022,rt:118,t:'m',imp:2,u:'mcu',rel:'2022-07',w:'Disney+',note:'Where Thor\u2019s head is at going into Doomsday.'},
-{id:'wf',n:'Black Panther: Wakanda Forever',y:2022,rt:161,t:'m',imp:2,u:'mcu',rel:'2022-11',w:'Disney+',note:'Wakanda + Talokan — both appear in the Doomsday trailer.'},
-{id:'quant',n:'Ant-Man and the Wasp: Quantumania',y:2023,rt:124,t:'m',imp:2,u:'mcu',rel:'2023-02',w:'Disney+',note:'Multiverse stakes go big-screen.'},
-{id:'gotg3',n:'Guardians of the Galaxy Vol. 3',y:2023,rt:150,t:'m',imp:1,u:'mcu',rel:'2023-05',w:'Disney+',note:'Closes the Guardians\u2019 chapter before the finale.'},
-{id:'marvels',n:'The Marvels',y:2023,rt:105,t:'m',imp:2,u:'mcu',rel:'2023-11',w:'Disney+',note:'That post-credits scene? X-Men. It matters now.'},
-{id:'dw',n:'Deadpool & Wolverine',y:2024,rt:128,t:'m',imp:2,u:'mcu',rel:'2024-07',w:'Disney+',note:'Fox universe officially collides with the MCU.'},
-{id:'bnw',n:'Captain America: Brave New World',y:2025,rt:118,t:'m',imp:2,u:'mcu',rel:'2025-02',w:'Disney+',note:'Sam\u2019s first outing as Cap — he leads in Doomsday.'},
-{id:'tbolts',n:'Thunderbolts*',y:2025,rt:127,t:'m',imp:2,u:'mcu',rel:'2025-05',w:'Disney+',note:'The New Avengers. The asterisk is the whole point.'},
-{id:'ff',n:'The Fantastic Four: First Steps',y:2025,rt:115,t:'m',imp:2,u:'mcu',rel:'2025-07',w:'Disney+',note:'Reed\u2019s family, Doom\u2019s obsession. Direct lead-in.'},
-{id:'bnd',n:'Spider-Man: Brand New Day',y:2026,rt:130,t:'m',imp:1,u:'mcu',rel:'2026-07',w:'Theaters Jul 31',up:true,note:'Peter, forgotten by the world, with the Punisher in tow.'},
-{id:'doomsday',n:'Avengers: Doomsday',y:2026,rt:170,t:'ms',imp:2,u:'mcu',rel:'2026-12',w:'Theaters Dec 18',up:true,note:'The one this whole list is for.'},
-// ---- Disney+ series & specials ----
-{id:'wv',n:'WandaVision',y:2021,rt:350,t:'tv',imp:2,u:'mcu',rel:'2021-01',w:'Disney+',eps:'9 eps',note:'Wanda\u2019s grief reshapes reality — Saga-critical.'},
-{id:'fatws',n:'The Falcon and the Winter Soldier',y:2021,rt:300,t:'tv',imp:1,u:'mcu',rel:'2021-03',w:'Disney+',eps:'6 eps',note:'How Sam takes up the shield.'},
-{id:'loki1',n:'Loki — Season 1',y:2021,rt:281,t:'tv',imp:2,u:'mcu',rel:'2021-06',w:'Disney+',eps:'6 eps',note:'The TVA, timelines, variants — the multiverse rulebook.'},
-{id:'whatif1',n:'What If...? — Season 1',y:2021,rt:290,t:'tv',imp:1,u:'mcu',rel:'2021-08',w:'Disney+',eps:'9 eps',note:'Variants visualized; several ideas resurface.'},
-{id:'hawkeye',n:'Hawkeye',y:2021,rt:300,t:'tv',imp:1,u:'mcu',rel:'2021-11',w:'Disney+',eps:'6 eps',note:'Yelena & Kate — Thunderbolts and beyond.'},
-{id:'moonknight',n:'Moon Knight',y:2022,rt:280,t:'tv',imp:0,u:'mcu',rel:'2022-03',w:'Disney+',eps:'6 eps'},
-{id:'msmarvel',n:'Ms. Marvel',y:2022,rt:280,t:'tv',imp:1,u:'mcu',rel:'2022-06',w:'Disney+',eps:'6 eps',note:'Kamala\u2019s mutation reveal + The Marvels setup.'},
-{id:'shehulk',n:'She-Hulk: Attorney at Law',y:2022,rt:310,t:'tv',imp:0,u:'mcu',rel:'2022-08',w:'Disney+',eps:'9 eps'},
-{id:'wbn',n:'Werewolf by Night',y:2022,rt:53,t:'sp',imp:0,u:'mcu',rel:'2022-10',w:'Disney+'},
-{id:'gotghol',n:'The Guardians of the Galaxy Holiday Special',y:2022,rt:44,t:'sp',imp:0,u:'mcu',rel:'2022-11',w:'Disney+'},
-{id:'secretinv',n:'Secret Invasion',y:2023,rt:280,t:'tv',imp:0,u:'mcu',rel:'2023-06',w:'Disney+',eps:'6 eps'},
-{id:'loki2',n:'Loki — Season 2',y:2023,rt:279,t:'tv',imp:2,u:'mcu',rel:'2023-10',w:'Disney+',eps:'6 eps',note:'He Who Remains, the loom, and a god of stories.'},
-{id:'whatif2',n:'What If...? — Season 2',y:2023,rt:290,t:'tv',imp:2,u:'mcu',rel:'2023-12',w:'Disney+',eps:'9 eps',note:'Introduces a key Doomsday-adjacent storyline.'},
-{id:'echo',n:'Echo',y:2024,rt:230,t:'tv',imp:0,u:'mcu',rel:'2024-01',w:'Disney+',eps:'5 eps'},
-{id:'agatha',n:'Agatha All Along',y:2024,rt:320,t:'tv',imp:1,u:'mcu',rel:'2024-09',w:'Disney+',eps:'9 eps',note:'Wanda\u2019s legacy continues through Billy.'},
-{id:'whatif3',n:'What If...? — Season 3',y:2024,rt:260,t:'tv',imp:0,u:'mcu',rel:'2024-12',w:'Disney+',eps:'8 eps'},
-{id:'ddba',n:'Daredevil: Born Again',y:2025,rt:420,t:'tv',imp:1,u:'mcu',rel:'2025-03',w:'Disney+',eps:'9 eps',note:'Street-level MCU; the Punisher warms up for Brand New Day.'},
-{id:'ironheart',n:'Ironheart',y:2025,rt:280,t:'tv',imp:0,u:'mcu',rel:'2025-06',w:'Disney+',eps:'6 eps'},
-{id:'wonderman',n:'Wonder Man',y:2026,rt:240,t:'tv',imp:0,u:'mcu',rel:'2026-01',w:'Disney+',eps:'8 eps'},
-// ---- Netflix / Defenders Saga ----
-{id:'dd1',n:'Daredevil — Season 1',y:2015,rt:690,t:'tv',imp:1,u:'mcu',rel:'2015-04',w:'Disney+',eps:'13 eps',note:'Matt Murdock & Kingpin — feeds Born Again.'},
-{id:'jj1',n:'Jessica Jones — Season 1',y:2015,rt:640,t:'tv',imp:0,u:'mcu',rel:'2015-11',w:'Disney+',eps:'13 eps'},
-{id:'dd2',n:'Daredevil — Season 2',y:2016,rt:690,t:'tv',imp:1,u:'mcu',rel:'2016-03',w:'Disney+',eps:'13 eps',note:'The Punisher debuts — he\u2019s in Brand New Day.'},
-{id:'lc1',n:'Luke Cage — Season 1',y:2016,rt:680,t:'tv',imp:0,u:'mcu',rel:'2016-09',w:'Disney+',eps:'13 eps'},
-{id:'if1',n:'Iron Fist — Season 1',y:2017,rt:700,t:'tv',imp:0,u:'mcu',rel:'2017-03',w:'Disney+',eps:'13 eps'},
-{id:'def',n:'The Defenders',y:2017,rt:390,t:'tv',imp:0,u:'mcu',rel:'2017-08',w:'Disney+',eps:'8 eps'},
-{id:'pun1',n:'The Punisher — Season 1',y:2017,rt:660,t:'tv',imp:1,u:'mcu',rel:'2017-11',w:'Disney+',eps:'13 eps',note:'Frank Castle\u2019s full story before his big-screen return.'},
-{id:'jj2',n:'Jessica Jones — Season 2',y:2018,rt:660,t:'tv',imp:0,u:'mcu',rel:'2018-03',w:'Disney+',eps:'13 eps'},
-{id:'lc2',n:'Luke Cage — Season 2',y:2018,rt:690,t:'tv',imp:0,u:'mcu',rel:'2018-06',w:'Disney+',eps:'13 eps'},
-{id:'if2',n:'Iron Fist — Season 2',y:2018,rt:500,t:'tv',imp:0,u:'mcu',rel:'2018-09',w:'Disney+',eps:'10 eps'},
-{id:'dd3',n:'Daredevil — Season 3',y:2018,rt:690,t:'tv',imp:1,u:'mcu',rel:'2018-10',w:'Disney+',eps:'13 eps',note:'Peak Daredevil; Born Again picks up from here.'},
-{id:'pun2',n:'The Punisher — Season 2',y:2019,rt:690,t:'tv',imp:0,u:'mcu',rel:'2019-01',w:'Disney+',eps:'13 eps'},
-{id:'jj3',n:'Jessica Jones — Season 3',y:2019,rt:670,t:'tv',imp:0,u:'mcu',rel:'2019-06',w:'Disney+',eps:'13 eps'},
-// ---- FOX universe ----
-{id:'xmen',n:'X-Men',y:2000,rt:104,t:'m',imp:1,u:'fox',rel:'2000-07',w:'Disney+',note:'The X-Men are IN Doomsday. Meet the original cast.'},
-{id:'x2',n:'X2: X-Men United',y:2003,rt:134,t:'m',imp:0,u:'fox',rel:'2003-05',w:'Disney+'},
-{id:'x3',n:'X-Men: The Last Stand',y:2006,rt:104,t:'m',imp:0,u:'fox',rel:'2006-05',w:'Disney+'},
-{id:'ffox',n:'Fantastic Four',y:2005,rt:106,t:'m',imp:0,u:'fox',rel:'2005-07',w:'Disney+'},
-{id:'ff2fox',n:'Fantastic Four: Rise of the Silver Surfer',y:2007,rt:92,t:'m',imp:0,u:'fox',rel:'2007-06',w:'Disney+'},
-{id:'origins',n:'X-Men Origins: Wolverine',y:2009,rt:107,t:'m',imp:0,u:'fox',rel:'2009-05',w:'Disney+'},
-{id:'firstclass',n:'X-Men: First Class',y:2011,rt:131,t:'m',imp:1,u:'fox',rel:'2011-06',w:'Disney+',note:'Young Magneto & Professor X — faces you\u2019ll see again.'},
-{id:'wolverine',n:'The Wolverine',y:2013,rt:126,t:'m',imp:0,u:'fox',rel:'2013-07',w:'Disney+'},
-{id:'dofp',n:'X-Men: Days of Future Past',y:2014,rt:132,t:'m',imp:1,u:'fox',rel:'2014-05',w:'Disney+',note:'Fox\u2019s own multiverse story — great Doomsday homework.'},
-{id:'fant4',n:'Fantastic Four (2015)',y:2015,rt:100,t:'m',imp:0,u:'fox',rel:'2015-08',w:'Disney+'},
-{id:'deadpool',n:'Deadpool',y:2016,rt:108,t:'m',imp:1,u:'fox',rel:'2016-02',w:'Disney+',note:'Required for Deadpool & Wolverine.'},
-{id:'apocalypse',n:'X-Men: Apocalypse',y:2016,rt:144,t:'m',imp:0,u:'fox',rel:'2016-05',w:'Disney+'},
-{id:'logan',n:'Logan',y:2017,rt:137,t:'m',imp:1,u:'fox',rel:'2017-03',w:'Disney+',note:'Wolverine\u2019s "ending" — makes his return hit harder.'},
-{id:'dp2',n:'Deadpool 2',y:2018,rt:119,t:'m',imp:1,u:'fox',rel:'2018-05',w:'Disney+',note:'Cable, time travel, and the family Wade fights for.'},
-{id:'darkph',n:'Dark Phoenix',y:2019,rt:113,t:'m',imp:0,u:'fox',rel:'2019-06',w:'Disney+'},
-{id:'newmut',n:'The New Mutants',y:2020,rt:94,t:'m',imp:0,u:'fox',rel:'2020-08',w:'Disney+'},
-// ---- SONY universe ----
-{id:'sm1',n:'Spider-Man (2002)',y:2002,rt:121,t:'m',imp:1,u:'sony',rel:'2002-05',w:'Disney+',note:'Tobey\u2019s origin — pays off in No Way Home.'},
-{id:'sm2',n:'Spider-Man 2',y:2004,rt:127,t:'m',imp:1,u:'sony',rel:'2004-06',w:'Disney+',note:'Doc Ock. You\u2019ll want this before No Way Home.'},
-{id:'sm3',n:'Spider-Man 3',y:2007,rt:139,t:'m',imp:0,u:'sony',rel:'2007-05',w:'Disney+'},
-{id:'asm1',n:'The Amazing Spider-Man',y:2012,rt:136,t:'m',imp:1,u:'sony',rel:'2012-07',w:'Rent/Various',note:'Andrew\u2019s Peter — the emotional core of No Way Home.'},
-{id:'asm2',n:'The Amazing Spider-Man 2',y:2014,rt:142,t:'m',imp:0,u:'sony',rel:'2014-05',w:'Rent/Various'},
-{id:'venom',n:'Venom',y:2018,rt:112,t:'m',imp:0,u:'sony',rel:'2018-10',w:'Rent/Various'},
-{id:'itsv',n:'Spider-Man: Into the Spider-Verse',y:2018,rt:117,t:'m',imp:1,u:'sony',rel:'2018-12',w:'Rent/Various',note:'The best multiverse movie, full stop. Great date night.'},
-{id:'venom2',n:'Venom: Let There Be Carnage',y:2021,rt:97,t:'m',imp:0,u:'sony',rel:'2021-10',w:'Rent/Various'},
-{id:'morbius',n:'Morbius',y:2022,rt:104,t:'m',imp:0,u:'sony',rel:'2022-04',w:'Rent/Various'},
-{id:'atsv',n:'Spider-Man: Across the Spider-Verse',y:2023,rt:140,t:'m',imp:1,u:'sony',rel:'2023-06',w:'Rent/Various',note:'Multiverse canon events — thematically perfect prep.'},
-{id:'mweb',n:'Madame Web',y:2024,rt:116,t:'m',imp:0,u:'sony',rel:'2024-02',w:'Rent/Various'},
-{id:'venom3',n:'Venom: The Last Dance',y:2024,rt:109,t:'m',imp:0,u:'sony',rel:'2024-10',w:'Rent/Various'},
-{id:'kraven',n:'Kraven the Hunter',y:2024,rt:127,t:'m',imp:0,u:'sony',rel:'2024-12',w:'Rent/Various'},
+  // ---- MCU films ----
+  { id:'im1',      tmdb:1726,    t:'m', imp:2, u:'mcu', note:'Where it all begins — and the face of Doom is very familiar.' },
+  { id:'hulk',     tmdb:1724,    t:'m', imp:0, u:'mcu' },
+  { id:'im2',      tmdb:10138,   t:'m', imp:1, u:'mcu', note:'Black Widow debuts; Tony’s legacy deepens.' },
+  { id:'thor1',    tmdb:10195,   t:'m', imp:1, u:'mcu', note:'Meet Thor and Loki — both matter enormously later.' },
+  { id:'cap1',     tmdb:1771,    t:'m', imp:2, u:'mcu', note:'The heart of the Avengers. Story-order starting line.' },
+  { id:'avengers', tmdb:24428,   t:'m', imp:2, u:'mcu', tag:'ms', note:'The team assembles. Loki’s scepter starts everything.' },
+  { id:'im3',      tmdb:68721,   t:'m', imp:1, u:'mcu', note:'Tony’s anxiety arc — echoes into who Doom is.' },
+  { id:'thor2',    tmdb:76338,   t:'m', imp:0, u:'mcu' },
+  { id:'caws',     tmdb:100402,  t:'m', imp:2, u:'mcu', note:'Bucky returns. Sets up Sam, Bucky, and Thunderbolts threads.' },
+  { id:'gotg',     tmdb:118340,  t:'m', imp:1, u:'mcu', note:'Cosmic MCU opens up; infinity stones explained.' },
+  { id:'aou',      tmdb:99861,   t:'m', imp:2, u:'mcu', tag:'ms', note:'Vision & Wanda arrive; the team starts to fracture.' },
+  { id:'antman',   tmdb:102899,  t:'m', imp:1, u:'mcu', note:'The Quantum Realm — the multiverse’s back door.' },
+  { id:'civilwar', tmdb:271110,  t:'m', imp:2, u:'mcu', note:'The Avengers break up. Everyone’s status quo shifts.' },
+  { id:'drs',      tmdb:284052,  t:'m', imp:2, u:'mcu', note:'Magic + multiverse rules 101.' },
+  { id:'gotg2',    tmdb:283995,  t:'m', imp:1, u:'mcu', note:'Family themes that pay off in Infinity War.' },
+  { id:'smh',      tmdb:315635,  t:'m', imp:1, u:'mcu', note:'Peter’s MCU story begins — leads to Brand New Day.' },
+  { id:'ragnarok', tmdb:284053,  t:'m', imp:2, u:'mcu', note:'Thor’s reinvention; walks straight into Infinity War.' },
+  { id:'bp',       tmdb:284054,  t:'m', imp:2, u:'mcu', note:'Wakanda — central to Doomsday’s alliances.' },
+  { id:'iw',       tmdb:299536,  t:'m', imp:2, u:'mcu', tag:'ms', note:'The snap. Non-negotiable.' },
+  { id:'aw',       tmdb:363088,  t:'m', imp:1, u:'mcu', note:'Quantum Realm deep dive that enables Endgame.' },
+  { id:'cm',       tmdb:299537,  t:'m', imp:1, u:'mcu', note:'Carol’s origin; sets up The Marvels.' },
+  { id:'endgame',  tmdb:299534,  t:'m', imp:2, u:'mcu', tag:'ms', note:'The Infinity Saga payoff. Watch (or rewatch) before Doomsday.' },
+  { id:'ffh',      tmdb:429617,  t:'m', imp:1, u:'mcu', note:'The world after Endgame; Peter’s identity exposed.' },
+  { id:'bw',       tmdb:497698,  t:'m', imp:1, u:'mcu', note:'Yelena’s debut — she leads into Thunderbolts*.' },
+  { id:'shangchi', tmdb:566525,  t:'m', imp:2, u:'mcu', note:'The Ten Rings are signaling... something for the Saga.' },
+  { id:'eternals', tmdb:524434,  t:'m', imp:0, u:'mcu' },
+  { id:'nwh',      tmdb:634649,  t:'m', imp:2, u:'mcu', note:'The multiverse cracks open on screen for the first time.' },
+  { id:'mom',      tmdb:453395,  t:'m', imp:2, u:'mcu', note:'Incursions + the Illuminati — core Doomsday rules.' },
+  { id:'lat',      tmdb:616037,  t:'m', imp:2, u:'mcu', note:'Where Thor’s head is at going into Doomsday.' },
+  { id:'wf',       tmdb:505642,  t:'m', imp:2, u:'mcu', note:'Wakanda + Talokan — both appear in the Doomsday trailer.' },
+  { id:'quant',    tmdb:640146,  t:'m', imp:2, u:'mcu', note:'Multiverse stakes go big-screen.' },
+  { id:'gotg3',    tmdb:447365,  t:'m', imp:1, u:'mcu', note:'Closes the Guardians’ chapter before the finale.' },
+  { id:'marvels',  tmdb:609681,  t:'m', imp:2, u:'mcu', note:'That post-credits scene? X-Men. It matters now.' },
+  { id:'dw',       tmdb:533535,  t:'m', imp:2, u:'mcu', note:'Fox universe officially collides with the MCU.' },
+  { id:'bnw',      tmdb:822119,  t:'m', imp:2, u:'mcu', note:'Sam’s first outing as Cap — he leads in Doomsday.' },
+  { id:'tbolts',   tmdb:986056,  t:'m', imp:2, u:'mcu', note:'The New Avengers. The asterisk is the whole point.' },
+  { id:'ff',       tmdb:617126,  t:'m', imp:2, u:'mcu', note:'Reed’s family, Doom’s obsession. Direct lead-in.' },
+  { id:'bnd',      tmdb:969681,  t:'m', imp:1, u:'mcu', up:true, note:'Peter, forgotten by the world, with the Punisher in tow.' }, // unreleased ✓verified
+  { id:'doomsday', tmdb:1003596, t:'m', imp:2, u:'mcu', up:true, tag:'ms', note:'The one this whole list is for.' },                 // unreleased ✓verified
+
+  // ---- Disney+ series & specials ----
+  { id:'wv',        tmdb:85271,  t:'tv', imp:2, u:'mcu', note:'Wanda’s grief reshapes reality — Saga-critical.' },
+  { id:'fatws',     tmdb:88396,  t:'tv', imp:1, u:'mcu', note:'How Sam takes up the shield.' },
+  { id:'loki1',     tmdb:84958,  t:'tv', imp:2, u:'mcu', n:'Loki — Season 1', rt:281, eps:'6 eps', note:'The TVA, timelines, variants — the multiverse rulebook.' },
+  { id:'whatif1',   tmdb:91363,  t:'tv', imp:1, u:'mcu', n:'What If...? — Season 1', rt:290, eps:'9 eps', note:'Variants visualized; several ideas resurface.' },
+  { id:'hawkeye',   tmdb:88329,  t:'tv', imp:1, u:'mcu', note:'Yelena & Kate — Thunderbolts and beyond.' },
+  { id:'moonknight',tmdb:92749,  t:'tv', imp:0, u:'mcu' },
+  { id:'msmarvel',  tmdb:92782,  t:'tv', imp:1, u:'mcu', note:'Kamala’s mutation reveal + The Marvels setup.' },
+  { id:'shehulk',   tmdb:92783,  t:'tv', imp:0, u:'mcu' },
+  { id:'wbn',       tmdb:894205, t:'m',  imp:0, u:'mcu', tag:'sp' },
+  { id:'gotghol',   tmdb:774752, t:'m',  imp:0, u:'mcu', tag:'sp' },
+  { id:'secretinv', tmdb:114472, t:'tv', imp:0, u:'mcu' },
+  { id:'loki2',     tmdb:84958,  t:'tv', imp:2, u:'mcu', n:'Loki — Season 2', rt:279, eps:'6 eps', note:'He Who Remains, the loom, and a god of stories.' },
+  { id:'whatif2',   tmdb:91363,  t:'tv', imp:2, u:'mcu', n:'What If...? — Season 2', rt:290, eps:'9 eps', note:'Introduces a key Doomsday-adjacent storyline.' },
+  { id:'echo',      tmdb:122226, t:'tv', imp:0, u:'mcu' },
+  { id:'agatha',    tmdb:138501, t:'tv', imp:1, u:'mcu', note:'Wanda’s legacy continues through Billy.' },
+  { id:'whatif3',   tmdb:91363,  t:'tv', imp:0, u:'mcu', n:'What If...? — Season 3', rt:260, eps:'8 eps' },
+  { id:'ddba',      tmdb:202555, t:'tv', imp:1, u:'mcu', note:'Street-level MCU; the Punisher warms up for Brand New Day.' },
+  { id:'ironheart', tmdb:114471, t:'tv', imp:0, u:'mcu' },
+  { id:'wonderman', tmdb:198178, t:'tv', imp:0, u:'mcu' }, // ✓verified
+
+  // ---- Netflix / Defenders Saga (multi-season → shared series id; season data kept inline) ----
+  { id:'dd1', tmdb:61889, t:'tv', imp:1, u:'mcu', n:'Daredevil — Season 1', rt:690, eps:'13 eps', note:'Matt Murdock & Kingpin — feeds Born Again.' },
+  { id:'jj1', tmdb:38472, t:'tv', imp:0, u:'mcu', n:'Jessica Jones — Season 1', rt:640, eps:'13 eps' },
+  { id:'dd2', tmdb:61889, t:'tv', imp:1, u:'mcu', n:'Daredevil — Season 2', rt:690, eps:'13 eps', note:'The Punisher debuts — he’s in Brand New Day.' },
+  { id:'lc1', tmdb:62126, t:'tv', imp:0, u:'mcu', n:'Luke Cage — Season 1', rt:680, eps:'13 eps' },
+  { id:'if1', tmdb:62127, t:'tv', imp:0, u:'mcu', n:'Iron Fist — Season 1', rt:700, eps:'13 eps' },
+  { id:'def', tmdb:62285, t:'tv', imp:0, u:'mcu' },
+  { id:'pun1',tmdb:67178, t:'tv', imp:1, u:'mcu', n:'The Punisher — Season 1', rt:660, eps:'13 eps', note:'Frank Castle’s full story before his big-screen return.' },
+  { id:'jj2', tmdb:38472, t:'tv', imp:0, u:'mcu', n:'Jessica Jones — Season 2', rt:660, eps:'13 eps' },
+  { id:'lc2', tmdb:62126, t:'tv', imp:0, u:'mcu', n:'Luke Cage — Season 2', rt:690, eps:'13 eps' },
+  { id:'if2', tmdb:62127, t:'tv', imp:0, u:'mcu', n:'Iron Fist — Season 2', rt:500, eps:'10 eps' },
+  { id:'dd3', tmdb:61889, t:'tv', imp:1, u:'mcu', n:'Daredevil — Season 3', rt:690, eps:'13 eps', note:'Peak Daredevil; Born Again picks up from here.' },
+  { id:'pun2',tmdb:67178, t:'tv', imp:0, u:'mcu', n:'The Punisher — Season 2', rt:690, eps:'13 eps' },
+  { id:'jj3', tmdb:38472, t:'tv', imp:0, u:'mcu', n:'Jessica Jones — Season 3', rt:670, eps:'13 eps' },
+
+  // ---- FOX universe ----
+  { id:'xmen',       tmdb:36657,  t:'m', imp:1, u:'fox', note:'The X-Men are IN Doomsday. Meet the original cast.' },
+  { id:'x2',         tmdb:36658,  t:'m', imp:0, u:'fox' },
+  { id:'x3',         tmdb:36668,  t:'m', imp:0, u:'fox' },
+  { id:'ffox',       tmdb:9738,   t:'m', imp:0, u:'fox' },
+  { id:'ff2fox',     tmdb:1979,   t:'m', imp:0, u:'fox' },
+  { id:'origins',    tmdb:2080,   t:'m', imp:0, u:'fox' },
+  { id:'firstclass', tmdb:49538,  t:'m', imp:1, u:'fox', note:'Young Magneto & Professor X — faces you’ll see again.' },
+  { id:'wolverine',  tmdb:76170,  t:'m', imp:0, u:'fox' },
+  { id:'dofp',       tmdb:127585, t:'m', imp:1, u:'fox', note:'Fox’s own multiverse story — great Doomsday homework.' },
+  { id:'fant4',      tmdb:166424, t:'m', imp:0, u:'fox' },
+  { id:'deadpool',   tmdb:293660, t:'m', imp:1, u:'fox', note:'Required for Deadpool & Wolverine.' },
+  { id:'apocalypse', tmdb:246655, t:'m', imp:0, u:'fox' },
+  { id:'logan',      tmdb:263115, t:'m', imp:1, u:'fox', note:'Wolverine’s "ending" — makes his return hit harder.' },
+  { id:'dp2',        tmdb:383498, t:'m', imp:1, u:'fox', note:'Cable, time travel, and the family Wade fights for.' },
+  { id:'darkph',     tmdb:320288, t:'m', imp:0, u:'fox' },
+  { id:'newmut',     tmdb:340102, t:'m', imp:0, u:'fox' },
+
+  // ---- SONY universe ----
+  { id:'sm1',    tmdb:557,    t:'m', imp:1, u:'sony', note:'Tobey’s origin — pays off in No Way Home.' },
+  { id:'sm2',    tmdb:558,    t:'m', imp:1, u:'sony', note:'Doc Ock. You’ll want this before No Way Home.' },
+  { id:'sm3',    tmdb:559,    t:'m', imp:0, u:'sony' },
+  { id:'asm1',   tmdb:1930,   t:'m', imp:1, u:'sony', note:'Andrew’s Peter — the emotional core of No Way Home.' },
+  { id:'asm2',   tmdb:102382, t:'m', imp:0, u:'sony' },
+  { id:'venom',  tmdb:335983, t:'m', imp:0, u:'sony' },
+  { id:'itsv',   tmdb:324857, t:'m', imp:1, u:'sony', note:'The best multiverse movie, full stop. Great date night.' },
+  { id:'venom2', tmdb:580489, t:'m', imp:0, u:'sony' },
+  { id:'morbius',tmdb:526007, t:'m', imp:0, u:'sony' },
+  { id:'atsv',   tmdb:569094, t:'m', imp:1, u:'sony', note:'Multiverse canon events — thematically perfect prep.' },
+  { id:'mweb',   tmdb:634492, t:'m', imp:0, u:'sony' },
+  { id:'venom3', tmdb:912649, t:'m', imp:0, u:'sony' },
+  { id:'kraven', tmdb:539972, t:'m', imp:0, u:'sony' },
 ];
 const BY_ID = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
 
@@ -841,6 +855,89 @@ async function initPush(){
   }
 }
 
+/* ---------------- TMDB (live titles, runtimes, posters) ---------------- */
+const TMDB_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZTI0ZDdjN2Q3MDQwMmQxMzhlMDJiZmYzMjcwNDEyYSIsIm5iZiI6MTc4NDc1MzU3MC42MDQsInN1YiI6IjZhNjEyZGEyYmFlZmQ5Y2E5OGE0ZjNkZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._vJn-8l4KR2bz-X35IfOYCEHyWCjTNNAI36D5oQye-U";
+const TMDB_IS_V4 = TMDB_TOKEN.startsWith('eyJ');
+const TMDB_IMG = "https://image.tmdb.org/t/p/w185";
+const TMDB_CACHE_KEY = 'doomsday_tmdb_v1';
+const TMDB_TTL = 7*24*60*60*1000;
+let tmdbCache = {};
+try { tmdbCache = JSON.parse(localStorage.getItem(TMDB_CACHE_KEY) || '{}'); } catch(e){ tmdbCache = {}; }
+function saveTmdbCache(){ try{ localStorage.setItem(TMDB_CACHE_KEY, JSON.stringify(tmdbCache)); }catch(e){} }
+
+// items with an inline name are multi-season rows we keep as-is (season label/runtime)
+const INLINE_META = new Set(ITEMS.filter(it=>it.n!=null).map(it=>it.id));
+
+function applyMeta(it, m){
+  it.poster = m.poster || null;
+  if(typeof m.up === 'boolean') it.up = m.up;
+  if(m.release) it.rel = m.release;
+  if(m.year) it.y = m.year;
+  if(!INLINE_META.has(it.id)){
+    if(m.title) it.n = m.title;
+    if(m.runtime) it.rt = m.runtime;
+    if(m.eps) it.eps = m.eps;
+  }
+}
+
+// ensure no display field is undefined before TMDB answers, then seed from cache
+ITEMS.forEach(it=>{
+  if(it.y==null) it.y='';
+  if(it.rt==null) it.rt=0;
+  if(it.rel==null) it.rel='';
+  if(it.eps==null) it.eps='';
+  if(it.up==null) it.up=false;
+  if(it.w==null) it.w='';
+  if(it.poster==null) it.poster=null;
+  if(it.n==null) it.n='…';
+  const c = tmdbCache[it.id];
+  if(c) applyMeta(it, c);
+});
+
+function tmdbFresh(id){ const c=tmdbCache[id]; return c && c.ts && (Date.now()-c.ts < TMDB_TTL); }
+function tmdbFetchUrl(base){ return TMDB_IS_V4 ? base : base+(base.includes('?')?'&':'?')+'api_key='+TMDB_TOKEN; }
+function tmdbHeaders(){ return TMDB_IS_V4 ? {accept:'application/json', Authorization:'Bearer '+TMDB_TOKEN} : {accept:'application/json'}; }
+
+async function tmdbFetchOne(it){
+  const kind = it.t==='tv' ? 'tv' : 'movie';
+  const res = await fetch(tmdbFetchUrl('https://api.themoviedb.org/3/'+kind+'/'+it.tmdb), {headers:tmdbHeaders()});
+  if(!res.ok) throw new Error('TMDB '+res.status+' '+it.id);
+  const d = await res.json();
+  const isTv = kind==='tv';
+  const date = isTv ? d.first_air_date : d.release_date;
+  const perEp = isTv ? ((d.episode_run_time && d.episode_run_time[0])||40) : 0;
+  const runtime = isTv ? perEp*(d.number_of_episodes||1) : (d.runtime||0);
+  return {
+    title: isTv ? d.name : d.title,
+    year: date ? date.slice(0,4) : '',
+    release: date || '',
+    runtime: runtime,
+    eps: (isTv && d.number_of_episodes) ? d.number_of_episodes+' eps' : '',
+    up: date ? (new Date(date) > new Date()) : false,
+    poster: d.poster_path ? TMDB_IMG+d.poster_path : null,
+    ts: Date.now()
+  };
+}
+
+let tmdbLoading = false;
+async function loadTmdb(){
+  if(tmdbLoading || !TMDB_TOKEN || TMDB_TOKEN.startsWith('PASTE_')) return;
+  tmdbLoading = true;
+  const stale = ITEMS.filter(it=>it.tmdb && !tmdbFresh(it.id));
+  const CHUNK = 8;
+  for(let i=0;i<stale.length;i+=CHUNK){
+    const batch = stale.slice(i,i+CHUNK);
+    const results = await Promise.all(batch.map(it=>
+      tmdbFetchOne(it).then(mm=>({it, mm})).catch(err=>{ console.warn(err.message); return null; })
+    ));
+    let changed=false;
+    for(const r of results){ if(r){ tmdbCache[r.it.id]=r.mm; applyMeta(r.it, r.mm); changed=true; } }
+    if(changed){ saveTmdbCache(); if(typeof renderAll==='function') renderAll(); }
+    if(i+CHUNK<stale.length) await new Promise(res=>setTimeout(res,300));
+  }
+  tmdbLoading=false;
+}
+
 /* ---------------- helpers ---------------- */
 function get(id){ return state.watched[id] || {m:false, d:false}; }
 function isDone(id){ const s=get(id); return s.m && s.d; }
@@ -914,8 +1011,8 @@ function renderNextNight(){
 /* ---------------- watchlist ---------------- */
 function typeBadge(it){
   if(it.t==='tv') return '<span class="badge type-tv">TV</span>';
-  if(it.t==='sp') return '<span class="badge type-sp">SPECIAL</span>';
-  if(it.t==='ms') return '<span class="badge type-ms">MILESTONE</span>';
+  if(it.tag==='sp') return '<span class="badge type-sp">SPECIAL</span>';
+  if(it.tag==='ms') return '<span class="badge type-ms">MILESTONE</span>';
   return '';
 }
 function impMark(it){
@@ -941,22 +1038,27 @@ function renderList(){
     const st = get(it.id);
     const done = st.m && st.d;
     if(f==='unwatched' && done) return;
-    if(f==='films' && !(it.t==='m'||it.t==='ms')) return;
-    if(f==='tv' && !(it.t==='tv'||it.t==='sp')) return;
+    if(f==='films' && it.t!=='m') return;
+    if(f==='tv' && it.t!=='tv') return;
     shown++;
 
     const sk = state.sched[it.id];
     const row = document.createElement('div');
-    row.className = 'row t-'+it.t + (done?' done':'') + (it.up?' up':'');
+    row.className = 'row t-'+it.t + (it.tag?' t-'+it.tag:'') + (done?' done':'') + (it.up?' up':'');
+    const posterImg = it.poster ? `<img src="${it.poster}" alt="" loading="lazy" onload="this.classList.add('loaded')" onerror="this.remove()">` : '';
     row.innerHTML = `
-      <div class="ord">${done ? '&#10003;' : String(order).padStart(2,'0')}</div>
+      <div class="poster">
+        <span class="ph">🎬</span>
+        ${posterImg}
+        <span class="ord">${done ? '&#10003;' : String(order).padStart(2,'0')}</span>
+      </div>
       <div>
         <div class="title">${impMark(it)}${it.n}</div>
         <div class="meta">
-          <span>${it.y}</span><span>&bull;</span>
-          <span>${it.eps ? it.eps : it.rt+' min'}</span>
+          ${it.y ? '<span>'+it.y+'</span><span>&bull;</span>' : ''}
+          <span>${it.eps ? it.eps : (it.rt ? it.rt+' min' : '…')}</span>
           ${typeBadge(it)}
-          ${it.up ? '<span class="badge theater">'+it.w.toUpperCase()+'</span>' : '<span class="badge stream">'+it.w+'</span>'}
+          ${it.up ? '<span class="badge theater">THEATERS</span>' : (it.w ? '<span class="badge stream">'+it.w+'</span>' : '')}
           ${(it.u==='fox') ? '<span class="badge uni">FOX</span>' : ''}
           ${(it.u==='sony') ? '<span class="badge uni">SONY</span>' : ''}
           ${sk && !done ? '<span class="badge sched" data-goto="'+sk+'">&#128197; '+prettyDate(sk)+'</span>' : ''}
@@ -1357,6 +1459,7 @@ function renderAll(){
 }
 renderAll();
 loadState();
+loadTmdb();
 </script>
 </body>
 </html>
