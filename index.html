@@ -509,6 +509,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 /* ============================================================
    🔴 STEP 1: PASTE YOUR FIREBASE CONFIG BETWEEN THE BRACES BELOW
@@ -698,11 +699,12 @@ function migrate(raw){
   }
   return base;
 }
-/* ---------------- Firebase real-time storage ---------------- */
-let dbRef = null, dbReady = false;
+/* ---------------- Firebase real-time storage (locked to signed-in devices) ---------------- */
+let dbRef = null, dbReady = false, auth = null;
 try{
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
+  auth = getAuth(app);
   // Uses your own private path name — keep it obscure, it's part of your "password"
   dbRef = ref(db, 'ontiveros_doomsday_v1');
   dbReady = true;
@@ -722,10 +724,31 @@ function note(msg, isErr){
 }
 
 function loadState(){
-  if(!dbReady || !dbRef){
+  if(!dbReady || !dbRef || !auth){
     note('Database not connected — paste your Firebase config into the file (Step 1 comment at the top of the script).', true);
     return;
   }
+  // Sign in anonymously first — the database rules only allow read/write once this
+  // succeeds AND the resulting device ID matches one of the two allowed IDs.
+  signInAnonymously(auth).then((cred)=>{
+    console.log('Signed in — device ID:', cred.user.uid);
+    // One-time setup helper: briefly shows this device's ID at the bottom of the
+    // screen so you can copy it into the database rules. Safe to leave in — it's
+    // just a random device ID, not a password.
+    const noteEl = document.getElementById('savenote');
+    noteEl.textContent = 'Device ID: ' + cred.user.uid;
+    noteEl.classList.remove('err');
+    noteEl.classList.add('show');
+    setTimeout(()=>noteEl.classList.remove('show'), 8000);
+
+    attachDbListener();
+  }).catch((err)=>{
+    console.error('Anonymous sign-in failed', err);
+    note("Couldn't sign in — check your internet connection.", true);
+  });
+}
+
+function attachDbListener(){
   // Live listener: the moment Daisy taps on her phone, this fires on yours.
   onValue(dbRef, (snapshot)=>{
     // Ignore echoes for a moment after our own taps so nothing flickers or reverts
@@ -741,7 +764,7 @@ function loadState(){
     }
   }, (err)=>{
     console.error('read failed', err);
-    note("Can't reach the database — check your internet or the database rules.", true);
+    note("Can't reach the database — check your internet, sign-in, or the database rules.", true);
   });
 }
 
